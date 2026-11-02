@@ -1,35 +1,109 @@
-import { Head, Link } from '@inertiajs/react';
 
-export default function Show({ recipe }) {
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
+
+export default function Show({ recipe, collections, recipeCollections }) {
+    const auth = usePage().props.auth;
+
+    const { data, setData, post, processing, errors, reset } = useForm({
+        collection_id: '',
+    });
+
+    function addToCollection(e) {
+        e.preventDefault();
+
+        post(
+            `/collections/${data.collection_id}/recipes/${recipe.id}`,
+            {
+                onSuccess: () => reset(),
+            }
+        );
+    }
+
     return (
         <>
             <Head title={recipe.title} />
 
             <div>
-                <Link href="/recipes">
-                    &larr; Back to recipes
-                </Link>
+                <Link href="/recipes">Back to recipes</Link>
 
                 <h1>{recipe.title}</h1>
 
-                <p>
-                    By {recipe.user.name}
-                </p>
+                <p>By {recipe.user.name}</p>
 
-                {recipe.description && (
-                    <p>{recipe.description}</p>
-                )}
+                <p>{recipe.description}</p>
 
-                <div>
-                    <p>Preparation time: {recipe.prep_time} minutes</p>
-                    <p>Cooking time: {recipe.cook_time} minutes</p>
-                    <p>Servings: {recipe.servings}</p>
-                </div>
+                <p>Preparation: {recipe.prep_time} minutes</p>
+                <p>Cooking: {recipe.cook_time} minutes</p>
+                <p>Servings: {recipe.servings}</p>
 
+                <h2>Instructions</h2>
+                <p>{recipe.instructions}</p>
                 <section>
-                    <h2>Instructions</h2>
-                    <p>{recipe.instructions}</p>
+                    <h2>Saved in collections</h2>
+
+                    {recipeCollections.length === 0 ? (
+                        <p>This recipe hasn't been added to any of your collections.</p>
+                    ) : (
+                        <ul>
+                            {recipeCollections.map(collection => (
+                                <li key={collection.id}>
+                                    <Link href={`/collections/${collection.id}`}>
+                                        {collection.name}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </section>
+                {auth?.user && (
+                    <section>
+                        <hr />
+
+                        <h2>Add to collection</h2>
+
+                        {collections.length === 0 ? (
+                            <p>
+                                You don't have any collections yet.
+                                <Link href="/collections">
+                                    Create a collection
+                                </Link>
+                            </p>
+                        ) : (
+                            <form onSubmit={addToCollection}>
+                                <select
+                                    value={data.collection_id}
+                                    onChange={e =>
+                                        setData('collection_id', e.target.value)
+                                    }
+                                >
+                                    <option value="">
+                                        Select a collection
+                                    </option>
+
+                                    {collections.map(collection => (
+                                        <option
+                                            key={collection.id}
+                                            value={collection.id}
+                                        >
+                                            {collection.name}
+                                        </option>
+                                    ))}
+                                </select>
+
+                                {errors.collection_id && (
+                                    <p>{errors.collection_id}</p>
+                                )}
+
+                                <button
+                                    type="submit"
+                                    disabled={processing || !data.collection_id}
+                                >
+                                    Add to collection
+                                </button>
+                            </form>
+                        )}
+                    </section>
+                )}
             </div>
         </>
     );

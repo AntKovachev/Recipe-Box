@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CollectionController;
 
 Route::get('/', function () {
     return redirect()->route('recipes.index');
@@ -18,6 +19,28 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/recipes', [RecipeController::class, 'store'])
         ->name('recipes.store');
+
+        Route::get('/collections', [CollectionController::class, 'index'])
+            ->name('collections.index');
+
+        Route::post('/collections', [CollectionController::class, 'store'])
+            ->name('collections.store');
+
+        Route::get('/collections/{collection}', [CollectionController::class, 'show'])
+            ->name('collections.show');
+
+        Route::delete('/collections/{collection}', [CollectionController::class, 'destroy'])
+            ->name('collections.destroy');
+
+        Route::post('/collections/{collection}/recipes/{recipe}', [
+            CollectionController::class,
+            'addRecipe',
+        ])->name('collections.recipes.store');
+
+        Route::delete('/collections/{collection}/recipes/{recipe}', [
+            CollectionController::class,
+            'removeRecipe',
+        ])->name('collections.recipes.destroy');
 });
 
 Route::get('/recipes/{recipe:slug}', [RecipeController::class, 'show'])
