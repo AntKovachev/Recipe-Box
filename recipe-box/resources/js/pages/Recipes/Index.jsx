@@ -38,6 +38,9 @@ export default function Index({
 
             <div>
                 <h1>Recipes</h1>
+                <Link href="/digests">
+                    Weekly Digests
+                </Link>
 
                 <form onSubmit={searchRecipes}>
                     <input

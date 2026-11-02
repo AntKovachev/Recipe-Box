@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\WeeklyDigestController;
 
 Route::get('/', function () {
     return redirect()->route('recipes.index');
@@ -41,6 +42,8 @@ Route::middleware('auth')->group(function () {
             CollectionController::class,
             'removeRecipe',
         ])->name('collections.recipes.destroy');
+        Route::get('/digests', [WeeklyDigestController::class, 'index'])
+            ->name('digests.index');
 });
 
 Route::get('/recipes/{recipe:slug}', [RecipeController::class, 'show'])
