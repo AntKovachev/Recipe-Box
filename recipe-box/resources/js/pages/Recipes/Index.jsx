@@ -1,13 +1,19 @@
-export default function Index({ recipes }) {
-    console.log('Recipes received:', recipes);
+import { router } from '@inertiajs/react';
 
+export default function Index({ recipes }) {
     return (
         <div>
-           {recipes.data.map(recipe => (
-                <p key={recipe.id}>
-                    {recipe.title} - Time to make: {recipe.prep_time} minute(s)
-                </p>    
+            <h1>Recipes</h1>
+
+            {recipes.data.map((recipe) => (
+                <div key={recipe.id}>
+                    <h2>{recipe.title}</h2>
+                </div>
             ))}
+
+            <button onClick={() => router.post('/logout')}>
+                Logout
+            </button>
         </div>
     );
 }
