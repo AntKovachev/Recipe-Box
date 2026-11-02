@@ -1,4 +1,4 @@
-import { router } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 
 export default function Index({ recipes }) {
     return (
@@ -7,7 +7,11 @@ export default function Index({ recipes }) {
 
             {recipes.data.map((recipe) => (
                 <div key={recipe.id}>
-                    <h2>{recipe.title}</h2>
+                    <h2>
+                        <Link href={`/recipes/${recipe.slug}`}>
+                            {recipe.title}
+                        </Link>
+                    </h2>
                 </div>
             ))}
 

@@ -11,6 +11,15 @@ Route::get('/', function () {
 Route::get('/recipes', [RecipeController::class, 'index'])
     ->name('recipes.index');
 
+
+Route::middleware('auth')->group(function () {
+    Route::get('/recipes/create', [RecipeController::class, 'create'])
+        ->name('recipes.create');
+
+    Route::post('/recipes', [RecipeController::class, 'store'])
+        ->name('recipes.store');
+});
+
 Route::get('/recipes/{recipe:slug}', [RecipeController::class, 'show'])
     ->name('recipes.show');
 
