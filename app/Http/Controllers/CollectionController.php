@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Http\Resources\CollectionResource;
 
 class CollectionController extends Controller
 {
@@ -25,7 +26,7 @@ class CollectionController extends Controller
             ->get();
 
         return Inertia::render('Collections/Index', [
-            'collections' => $collections,
+            'collections' => CollectionResource::collection($collections),
             'collectionTypes' => collect(CollectionType::cases())
                 ->map(fn (CollectionType $type) => [
                     'value' => $type->value,
@@ -45,7 +46,7 @@ class CollectionController extends Controller
         $collection->load('recipes.user:id,name');
 
         return Inertia::render('Collections/Show', [
-            'collection' => $collection,
+            'collection' => new CollectionResource($collection),
         ]);
     }
 

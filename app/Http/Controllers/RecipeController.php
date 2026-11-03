@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RecipeRequest;
+use App\Http\Resources\RecipeResource;
 use App\Models\Collection;
 use App\Models\Recipe;
 use Illuminate\Database\Eloquent\Builder;
@@ -49,8 +50,14 @@ class RecipeController extends Controller
             });
         }
 
+        $recipes = $query->paginate(10)->withQueryString();
+
+        $recipes->through(
+            fn ($recipe) => (new RecipeResource($recipe))->resolve()
+        );
+
         return Inertia::render('Recipes/Index', [
-            'recipes' => $query->paginate(10)->withQueryString(),
+            'recipes' => $recipes,
             'collections' => $collections,
             'selectedCollection' => $request->input('collection'),
             'search' => $request->input('search', ''),
@@ -82,7 +89,7 @@ class RecipeController extends Controller
             : collect();
 
         return Inertia::render('Recipes/Show', [
-            'recipe' => $recipe,
+            'recipe' => new RecipeResource($recipe),
             'collections' => $collections,
             'recipeCollections' => $recipeCollections,
         ]);
