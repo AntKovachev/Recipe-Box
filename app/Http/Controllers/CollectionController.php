@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CollectionRequest;
 use App\Models\Collection;
+use App\Models\Recipe;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Http\RedirectResponse;
 
 class CollectionController extends Controller
 {
@@ -15,8 +17,8 @@ class CollectionController extends Controller
      */
     public function index(): Response
     {
-        $collections = auth()->user()
-            ->collections()
+        $collections = Collection::query()
+            ->where('user_id', auth()->id())
             ->withCount('recipes')
             ->latest()
             ->get();
@@ -45,9 +47,10 @@ class CollectionController extends Controller
      */
     public function store(CollectionRequest $request): RedirectResponse
     {
-        $request->user()->collections()->create(
-            $request->validated()
-        );
+        Collection::query()->create([
+            ...$request->validated(),
+            'user_id' => $request->user()->id,
+        ]);
 
         return redirect()->route('collections.index')
             ->with('success', 'Collection created successfully.');
@@ -68,11 +71,14 @@ class CollectionController extends Controller
     /**
      * Add a recipe to a collection.
      */
-    public function addRecipe(Collection $collection, \App\Models\Recipe $recipe): RedirectResponse
+    public function addRecipe(Collection $collection, Recipe $recipe): RedirectResponse
     {
         abort_unless($collection->user_id === auth()->id(), 403);
 
-        $collection->recipes()->syncWithoutDetaching([$recipe->id]);
+        DB::table('collection_recipe')->insertOrIgnore([
+            'collection_id' => $collection->id,
+            'recipe_id' => $recipe->id,
+        ]);
 
         return back()->with('success', 'Recipe added to collection.');
     }
@@ -80,11 +86,14 @@ class CollectionController extends Controller
     /**
      * Remove a recipe from a collection.
      */
-    public function removeRecipe(Collection $collection, \App\Models\Recipe $recipe): RedirectResponse
+    public function removeRecipe(Collection $collection, Recipe $recipe): RedirectResponse
     {
         abort_unless($collection->user_id === auth()->id(), 403);
 
-        $collection->recipes()->detach($recipe->id);
+        DB::table('collection_recipe')
+            ->where('collection_id', $collection->id)
+            ->where('recipe_id', $recipe->id)
+            ->delete();
 
         return back()->with('success', 'Recipe removed from collection.');
     }

@@ -5,14 +5,14 @@ export default function Show({ recipe, collections, recipeCollections }) {
     const auth = usePage().props.auth;
 
     const { data, setData, post, processing, errors, reset } = useForm({
-        collection_id: '',
+        collectionId: '',
     });
 
     function addToCollection(e) {
         e.preventDefault();
-
+        console.log(data)
         post(
-            `/collections/${data.collection_id}/recipes/${recipe.id}`,
+            `/collections/${data.collectionId}/recipes/${recipe.id}`,
             {
                 onSuccess: () => reset(),
             }
@@ -55,55 +55,52 @@ export default function Show({ recipe, collections, recipeCollections }) {
                         </ul>
                     )}
                 </section>
-                {auth?.user && (
-                    <section>
-                        <hr />
+                <section>
+                    <hr />
 
-                        <h2>Add to collection</h2>
+                    <h2>Add to collection</h2>
 
-                        {collections.length === 0 ? (
-                            <p>
-                                You don't have any collections yet.
-                                <Link href="/collections">
-                                    Create a collection
-                                </Link>
-                            </p>
-                        ) : (
-                            <form onSubmit={addToCollection}>
-                                <select
-                                    value={data.collection_id}
-                                    onChange={e =>
-                                        setData('collection_id', e.target.value)
-                                    }
-                                >
-                                    <option value="">
-                                        Select a collection
+                    {collections.length === 0 ? (
+                        <p>
+                            You don't have any collections yet.
+                            <Link href="/collections">
+                                Create a collection
+                            </Link>
+                        </p>
+                    ) : (
+                        <form onSubmit={addToCollection}>
+                            <select
+                                value={data.collectionId}
+                                onChange={e =>
+                                    setData('collectionId', e.target.value)
+                                }                                >
+                                <option value="">
+                                    Select a collection
+                                </option>
+
+                                {collections.map(collection => (
+                                    <option
+                                        key={collection.id}
+                                        value={collection.id}
+                                    >
+                                        {collection.name}
                                     </option>
+                                ))}
+                            </select>
 
-                                    {collections.map(collection => (
-                                        <option
-                                            key={collection.id}
-                                            value={collection.id}
-                                        >
-                                            {collection.name}
-                                        </option>
-                                    ))}
-                                </select>
+                            {errors.collectionId && (
+                                <p>{errors.collectionId}</p>
+                            )}
 
-                                {errors.collection_id && (
-                                    <p>{errors.collection_id}</p>
-                                )}
-
-                                <button
-                                    type="submit"
-                                    disabled={processing || !data.collection_id}
-                                >
-                                    Add to collection
-                                </button>
-                            </form>
-                        )}
-                    </section>
-                )}
+                            <button
+                                type="submit"
+                                disabled={processing || !data.collectionId}
+                            >
+                                Add to collection
+                            </button>
+                        </form>
+                    )}
+                </section>
             </div>
         </>
     );

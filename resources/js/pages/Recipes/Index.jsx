@@ -73,7 +73,7 @@ export default function Index({
                     </select>
                 </div>
 
-                {recipes.data.length === 0 ? (
+                {recipes?.data?.length === 0 ? (
                     <p>No recipes found.</p>
                 ) : (
                     recipes.data.map(recipe => (

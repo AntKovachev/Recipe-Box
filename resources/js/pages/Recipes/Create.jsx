@@ -1,18 +1,28 @@
-
 import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function Create() {
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, processing, errors, transform } = useForm({
         title: '',
         description: '',
         instructions: '',
-        prep_time: 0,
-        cook_time: 0,
+        prepTime: 0,
+        cookTime: 0,
         servings: 1,
     });
 
     const submit = (e) => {
         e.preventDefault();
+
+        transform((data) => {
+            const { prepTime, cookTime, ...rest } = data;
+            console.log(rest)
+            return {
+                ...rest,
+                prep_time: prepTime,
+                cook_time: cookTime,
+            };
+        });
+
         post('/recipes');
     };
 
@@ -58,25 +68,25 @@ export default function Create() {
                     </div>
 
                     <div>
-                        <label htmlFor="prep_time">Preparation time (minutes)</label>
+                        <label htmlFor="prepTime">Preparation time (minutes)</label>
                         <input
-                            id="prep_time"
+                            id="prepTime"
                             type="number"
                             min="0"
-                            value={data.prep_time}
-                            onChange={(e) => setData('prep_time', e.target.value)}
+                            value={data.prepTime}
+                            onChange={(e) => setData('prepTime', e.target.value)}
                         />
                         {errors.prep_time && <div>{errors.prep_time}</div>}
                     </div>
 
                     <div>
-                        <label htmlFor="cook_time">Cooking time (minutes)</label>
+                        <label htmlFor="cookTime">Cooking time (minutes)</label>
                         <input
-                            id="cook_time"
+                            id="cookTime"
                             type="number"
                             min="0"
-                            value={data.cook_time}
-                            onChange={(e) => setData('cook_time', e.target.value)}
+                            value={data.cookTime}
+                            onChange={(e) => setData('cookTime', e.target.value)}
                         />
                         {errors.cook_time && <div>{errors.cook_time}</div>}
                     </div>
