@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\CollectionType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Validation\Rule;
 
 class CollectionRequest extends FormRequest
 {
@@ -15,7 +17,7 @@ class CollectionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', Rule::enum(CollectionType::class)],
             'description' => ['nullable', 'string', 'max:1000'],
         ];
     }

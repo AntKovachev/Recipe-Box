@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\CollectionType;
 use App\Http\Requests\CollectionRequest;
 use App\Models\Collection;
 use App\Models\Recipe;
@@ -25,6 +26,12 @@ class CollectionController extends Controller
 
         return Inertia::render('Collections/Index', [
             'collections' => $collections,
+            'collectionTypes' => collect(CollectionType::cases())
+                ->map(fn (CollectionType $type) => [
+                    'value' => $type->value,
+                    'label' => $type->label(),
+                ])
+                ->values(),
         ]);
     }
 

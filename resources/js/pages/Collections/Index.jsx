@@ -1,7 +1,6 @@
-
 import { Head, Link, useForm } from '@inertiajs/react';
 
-export default function Index({ collections }) {
+export default function Index({ collections, collectionTypes }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         description: '',
@@ -28,27 +27,43 @@ export default function Index({ collections }) {
 
                 <form onSubmit={submit}>
                     <div>
-                        <label>Name</label>
-                        <input
+                        <label htmlFor="name">Collection type</label>
+
+                        <select
+                            id="name"
                             value={data.name}
                             onChange={e => setData('name', e.target.value)}
-                            placeholder="e.g. Italian Food"
-                        />
+                        >
+                            <option value="">Select a collection</option>
+
+                            {collectionTypes.map(type => (
+                                <option key={type.value} value={type.value}>
+                                    {type.label}
+                                </option>
+                            ))}
+                        </select>
+
                         {errors.name && <p>{errors.name}</p>}
                     </div>
 
                     <div>
-                        <label>Description</label>
+                        <label htmlFor="description">Description</label>
+
                         <textarea
+                            id="description"
                             value={data.description}
                             onChange={e => setData('description', e.target.value)}
                             placeholder="Optional description"
                         />
+
                         {errors.description && <p>{errors.description}</p>}
                     </div>
 
-                    <button type="submit" disabled={processing}>
-                        Create collection
+                    <button
+                        type="submit"
+                        disabled={processing || !data.name}
+                    >
+                        {processing ? 'Creating...' : 'Create collection'}
                     </button>
                 </form>
 
