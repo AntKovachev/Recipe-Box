@@ -33,12 +33,7 @@ class RecipeController extends Controller
             ->latest();
 
         if ($request->filled('search')) {
-            $search = $request->input('search');
-
-            $query->where(function (Builder $query) use ($search) {
-                $query->where('title', 'ilike', "%{$search}%")
-                    ->orWhere('description', 'ilike', "%{$search}%");
-            });
+            $query->search($request->input('search'));
         }
 
         if ($request->filled('collection') && $user) {

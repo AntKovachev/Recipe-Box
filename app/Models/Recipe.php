@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 
 #[Fillable([
     'title',
@@ -33,5 +35,14 @@ class Recipe extends Model implements HasMedia
     {
         return $this->belongsToMany(Collection::class)
             ->withTimestamps();
+    }
+
+    #[Scope]
+    protected function search(Builder $query, string $search): void
+    {
+        $query->where(function (Builder $query) use ($search) {
+            $query->where('title', 'ilike', "%{$search}%")
+                ->orWhere('description', 'ilike', "%{$search}%");
+        });
     }
 }
