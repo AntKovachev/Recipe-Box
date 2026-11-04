@@ -1,6 +1,7 @@
 
 import { Head, Link, router } from '@inertiajs/react';
 import { useState, useRef, useEffect } from 'react';
+import Pagination from '@/Components/Pagination';
 
 export default function Index({
     recipes,
@@ -106,16 +107,7 @@ export default function Index({
                 )}
 
                 <div>
-                    {recipes.links.map((link, index) => (
-                        <button
-                            key={index}
-                            disabled={!link.url}
-                            onClick={() => router.visit(link.url)}
-                            dangerouslySetInnerHTML={{
-                                __html: link.label,
-                            }}
-                        />
-                    ))}
+                    <Pagination links={recipes.links} />
                 </div>
             </div>
         </>
