@@ -20,7 +20,7 @@ class RecipeResource extends JsonResource
             'cook_time' => $this->cook_time,
             'servings' => $this->servings,
             'user_id' => $this->user_id,
-
+            'image_url' => $this->getFirstMediaUrl('recipe-images') ?: null,
             'user' => [
                 'id' => $this->user?->id,
                 'name' => $this->user?->name,

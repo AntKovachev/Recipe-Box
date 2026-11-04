@@ -42,7 +42,7 @@ export default function Index({ collections, collectionTypes }) {
                             ))}
                         </select>
 
-                        {errors.name && <p>{errors.name}</p>}
+                        {errors.name ? <p>{errors.name}</p>:null}
                     </div>
 
                     <div>
@@ -55,7 +55,7 @@ export default function Index({ collections, collectionTypes }) {
                             placeholder="Optional description"
                         />
 
-                        {errors.description && <p>{errors.description}</p>}
+                        {errors.description ? <p>{errors.description}</p>:null}
                     </div>
 
                     <button

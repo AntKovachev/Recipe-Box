@@ -9,17 +9,17 @@ export default function FlashMessage() {
 
     return (
         <div>
-            {flash.success && (
+            {flash.success ? (
                 <div className="bg-green-100 text-green-800 p-3 rounded">
                     {flash.success}
                 </div>
-            )}
+            ):null}
 
-            {flash.error && (
+            {flash.error ? (
                 <div className="bg-red-100 text-red-800 p-3 rounded">
                     {flash.error}
                 </div>
-            )}
+            ):null}
         </div>
     );
 }

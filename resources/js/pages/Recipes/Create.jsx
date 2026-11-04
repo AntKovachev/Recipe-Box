@@ -1,13 +1,15 @@
 import { Head, Link, useForm } from '@inertiajs/react';
+import { useState, useEffect } from 'react';
 
 export default function Create() {
-    const { data, setData, post, processing, errors, transform, reset } = useForm({
+    const { data, setData, post, processing, errors, transform, reset, progress } = useForm({
         title: '',
         description: '',
         instructions: '',
         prepTime: 0,
         cookTime: 0,
         servings: 1,
+        image: null
     });
 
     const submit = (e) => {
@@ -24,9 +26,24 @@ export default function Create() {
         });
 
         post('/recipes', {
+            forceFormData: true,
             onSuccess: () => reset()
         });
     };
+
+    const [preview, setPreview] = useState(null);
+
+    useEffect(() => {
+        if (!data.image) {
+            setPreview(null);
+            return;
+        }
+
+        const objectUrl = URL.createObjectURL(data.image);
+        setPreview(objectUrl);
+
+        return () => URL.revokeObjectURL(objectUrl)
+    }, [data.image])
 
     return (
         <>
@@ -44,7 +61,7 @@ export default function Create() {
                             value={data.title}
                             onChange={(e) => setData('title', e.target.value)}
                         />
-                        {errors.title && <div>{errors.title}</div>}
+                        {errors.title ? <div>{errors.title}</div> : null}
                     </div>
 
                     <div>
@@ -54,7 +71,7 @@ export default function Create() {
                             value={data.description}
                             onChange={(e) => setData('description', e.target.value)}
                         />
-                        {errors.description && <div style={{color: 'red'}}>{errors.description}</div>}
+                        {errors.description ? <div style={{color: 'red'}}>{errors.description}</div>:null}
                     </div>
 
                     <div>
@@ -64,7 +81,7 @@ export default function Create() {
                             value={data.instructions}
                             onChange={(e) => setData('instructions', e.target.value)}
                         />
-                        {errors.instructions && <div style={{color: 'red'}}>{errors.instructions}</div>}
+                        {errors.instructions ? <div style={{color: 'red'}}>{errors.instructions}</div>:null}
                     </div>
 
                     <div>
@@ -76,7 +93,7 @@ export default function Create() {
                             value={data.prepTime}
                             onChange={(e) => setData('prepTime', e.target.value)}
                         />
-                        {errors.prep_time && <div style={{color: 'red'}}>{errors.prep_time}</div>}
+                        {errors.prep_time ? <div style={{color: 'red'}}>{errors.prep_time}</div>:null}
                     </div>
 
                     <div>
@@ -88,7 +105,7 @@ export default function Create() {
                             value={data.cookTime}
                             onChange={(e) => setData('cookTime', e.target.value)}
                         />
-                        {errors.cook_time && <div style={{color: 'red'}}>{errors.cook_time}</div>}
+                        {errors.cook_time ? <div style={{color: 'red'}}>{errors.cook_time}</div>:null}
                     </div>
 
                     <div>
@@ -100,7 +117,38 @@ export default function Create() {
                             value={data.servings}
                             onChange={(e) => setData('servings', e.target.value)}
                         />
-                        {errors.servings && <div style={{color: 'red'}}>{errors.servings}</div>}
+                        {errors.servings ? <div style={{color: 'red'}}>{errors.servings}</div>:null}
+                    </div>
+
+                    <div>
+                        <label>Recipe image</label>
+
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={e => setData('image', e.target.files[0])}
+                        />
+
+                        {errors.image ? <p>{errors.image}</p>:null}
+
+                        {preview ? (
+                            <img
+                                src={preview}
+                                alt="Recipe preview"
+                                width="200"
+                            />
+                        ): null}
+
+                        {progress ? (
+                            <div>
+                                <p>Uploading: {progress.percentage}%</p>
+
+                                <progress
+                                    value={progress.percentage}
+                                    max="100"
+                                />
+                            </div>
+                        ): null}
                     </div>
 
                     <button type="submit" disabled={processing}>

@@ -110,11 +110,20 @@ class RecipeController extends Controller
     {
         $validated = $request->validated();
 
-        Recipe::query()->create([
+        $image = $validated['image'] ?? null;
+        unset($validated['image']);
+        
+        $recipe = Recipe::query()->create([
             ...$validated,
             'user_id' => $request->user()->id,
             'slug' => Str::slug($validated['title']) . '-' . Str::random(6),
         ]);
+
+        if ($image) {
+            $recipe
+                ->addMedia($image)
+                ->toMediaCollection('recipe-images');
+        }
 
         return redirect()->route('recipes.index')
             ->with('success', 'Recipe created successfully');

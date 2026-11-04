@@ -26,7 +26,7 @@ export default function Register() {
                         value={data.name}
                         onChange={e => setData('name', e.target.value)}
                     />
-                    {errors.name && <div>{errors.name}</div>}
+                    {errors.name ? <div>{errors.name}</div>:null}
                 </div>
 
                 <div>
@@ -36,7 +36,7 @@ export default function Register() {
                         value={data.email}
                         onChange={e => setData('email', e.target.value)}
                     />
-                    {errors.email && <div>{errors.email}</div>}
+                    {errors.email ? <div>{errors.email}</div>:null}
                 </div>
 
                 <div>
@@ -46,7 +46,7 @@ export default function Register() {
                         value={data.password}
                         onChange={e => setData('password', e.target.value)}
                     />
-                    {errors.password && <div>{errors.password}</div>}
+                    {errors.password ? <div>{errors.password}</div>:null}
                 </div>
 
                 <div>

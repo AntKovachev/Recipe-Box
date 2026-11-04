@@ -24,7 +24,7 @@ export default function Login() {
                         value={data.email}
                         onChange={e => setData('email', e.target.value)}
                     />
-                    {errors.email && <div>{errors.email}</div>}
+                    {errors.email ? <div>{errors.email}</div> :null}
                 </div>
 
                 <div>
@@ -34,7 +34,7 @@ export default function Login() {
                         value={data.password}
                         onChange={e => setData('password', e.target.value)}
                     />
-                    {errors.password && <div>{errors.password}</div>}
+                    {errors.password ? <div>{errors.password}</div> :null}
                 </div>
 
                 <button type="submit" disabled={processing}>

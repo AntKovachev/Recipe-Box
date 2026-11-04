@@ -26,6 +26,7 @@ class RecipeRequest extends FormRequest
             'prep_time' => ['required', 'integer', 'min:0'],
             'cook_time' => ['required', 'integer', 'min:0'],
             'servings' => ['required', 'integer', 'min:1'],
+            'image' => ['nullable', 'image', 'max:2048'], //2mb max size i think its fair
         ];
     }
 }
