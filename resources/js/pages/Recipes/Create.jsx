@@ -1,7 +1,7 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function Create() {
-    const { data, setData, post, processing, errors, transform } = useForm({
+    const { data, setData, post, processing, errors, transform, reset } = useForm({
         title: '',
         description: '',
         instructions: '',
@@ -15,7 +15,7 @@ export default function Create() {
 
         transform((data) => {
             const { prepTime, cookTime, ...rest } = data;
-            console.log(rest)
+
             return {
                 ...rest,
                 prep_time: prepTime,
@@ -23,7 +23,9 @@ export default function Create() {
             };
         });
 
-        post('/recipes');
+        post('/recipes', {
+            onSuccess: () => reset()
+        });
     };
 
     return (
@@ -54,7 +56,7 @@ export default function Create() {
                             value={data.description}
                             onChange={(e) => setData('description', e.target.value)}
                         />
-                        {errors.description && <div>{errors.description}</div>}
+                        {errors.description && <div style={{color: 'red'}}>{errors.description}</div>}
                     </div>
 
                     <div>
@@ -64,7 +66,7 @@ export default function Create() {
                             value={data.instructions}
                             onChange={(e) => setData('instructions', e.target.value)}
                         />
-                        {errors.instructions && <div>{errors.instructions}</div>}
+                        {errors.instructions && <div style={{color: 'red'}}>{errors.instructions}</div>}
                     </div>
 
                     <div>
@@ -76,7 +78,7 @@ export default function Create() {
                             value={data.prepTime}
                             onChange={(e) => setData('prepTime', e.target.value)}
                         />
-                        {errors.prep_time && <div>{errors.prep_time}</div>}
+                        {errors.prep_time && <div style={{color: 'red'}}>{errors.prep_time}</div>}
                     </div>
 
                     <div>
@@ -88,7 +90,7 @@ export default function Create() {
                             value={data.cookTime}
                             onChange={(e) => setData('cookTime', e.target.value)}
                         />
-                        {errors.cook_time && <div>{errors.cook_time}</div>}
+                        {errors.cook_time && <div style={{color: 'red'}}>{errors.cook_time}</div>}
                     </div>
 
                     <div>
@@ -100,7 +102,7 @@ export default function Create() {
                             value={data.servings}
                             onChange={(e) => setData('servings', e.target.value)}
                         />
-                        {errors.servings && <div>{errors.servings}</div>}
+                        {errors.servings && <div style={{color: 'red'}}>{errors.servings}</div>}
                     </div>
 
                     <button type="submit" disabled={processing}>
