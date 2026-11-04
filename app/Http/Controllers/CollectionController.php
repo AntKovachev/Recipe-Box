@@ -11,9 +11,13 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Http\Resources\CollectionResource;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Routing\Controller as BaseController;
 
-class CollectionController extends Controller
+class CollectionController extends BaseController
 {
+        use AuthorizesRequests;
+
     /**
      * Display the user's collections.
      */
@@ -41,7 +45,7 @@ class CollectionController extends Controller
      */
     public function show(Collection $collection): Response
     {
-        abort_unless($collection->user_id === auth()->id(), 403);
+        $this->authorize('view', $collection);
 
         $collection->load('recipes.user:id,name');
 
@@ -69,7 +73,7 @@ class CollectionController extends Controller
      */
     public function destroy(Collection $collection): RedirectResponse
     {
-        abort_unless($collection->user_id === auth()->id(), 403);
+        $this->authorize('delete', $collection);
 
         $collection->delete();
 
@@ -81,7 +85,7 @@ class CollectionController extends Controller
      */
     public function addRecipe(Collection $collection, Recipe $recipe): RedirectResponse
     {
-        abort_unless($collection->user_id === auth()->id(), 403);
+        $this->authorize('addRecipe', $collection);
 
         DB::table('collection_recipe')->insertOrIgnore([
             'collection_id' => $collection->id,
@@ -96,7 +100,7 @@ class CollectionController extends Controller
      */
     public function removeRecipe(Collection $collection, Recipe $recipe): RedirectResponse
     {
-        abort_unless($collection->user_id === auth()->id(), 403);
+        $this->authorize('removeRecipe', $collection);
 
         DB::table('collection_recipe')
             ->where('collection_id', $collection->id)
