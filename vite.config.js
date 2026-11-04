@@ -20,7 +20,11 @@ export default defineConfig({
             include: /\.(js|jsx|ts|tsx)$/,
         }),
         tailwindcss(),
-        inertia()
+        inertia({
+            ssr: {
+                entry: 'resources/js/ssr.jsx',
+            },
+        })
     ],
     server: {
         watch: {
