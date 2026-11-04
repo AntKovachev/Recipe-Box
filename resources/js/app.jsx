@@ -2,6 +2,8 @@
 import { hydrateRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import { SWRConfig } from 'swr';
+import { fetcher } from './lib/fetcher';
 import AppLayout from './Layouts/AppLayout';
 
 createInertiaApp({
@@ -19,6 +21,11 @@ createInertiaApp({
     },
 
     setup({ el, App, props }) {
-        hydrateRoot(el, <App {...props} />);
+        hydrateRoot(
+            el,
+            <SWRConfig value={{ fetcher }}>
+                <App {...props} />
+            </SWRConfig>
+        );
     },
 });

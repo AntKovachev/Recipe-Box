@@ -4,6 +4,8 @@ import createServer from '@inertiajs/react/server';
 import { renderToString } from 'react-dom/server';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import AppLayout from './Layouts/AppLayout';
+import { SWRConfig } from 'swr';
+import { fetcher } from './lib/fetcher';
 
 createServer(page => createInertiaApp({
     page,
@@ -21,6 +23,9 @@ createServer(page => createInertiaApp({
 
         return page;
     },
-
-    setup: ({ App, props }) => <App {...props} />,
+    setup: ({ App, props }) => (
+        <SWRConfig value={{ fetcher }}>
+            <App {...props} />
+        </SWRConfig>
+    ),
 }));

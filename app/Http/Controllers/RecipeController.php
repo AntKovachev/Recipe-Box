@@ -9,6 +9,7 @@ use App\Models\Recipe;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -122,5 +123,15 @@ class RecipeController extends Controller
 
         return redirect()->route('recipes.index')
             ->with('success', 'Recipe created successfully');
+    }
+
+    public function apiIndex(): AnonymousResourceCollection
+    {
+        return RecipeResource::collection(
+            Recipe::query()
+                ->with('user:id,name')
+                ->latest()
+                ->paginate(10)
+        );
     }
 }

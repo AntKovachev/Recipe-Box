@@ -2,6 +2,7 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { useState, useRef, useEffect } from 'react';
 import Pagination from '@/Components/Pagination';
+// import useSWR from 'swr';
 
 export default function Index({
     recipes,
@@ -11,6 +12,7 @@ export default function Index({
 }) {
     const [searchTerm, setSearchTerm] = useState(search || '');
     const firstRender = useRef(true);
+    // const { data, error, isLoading, mutate } = useSWR('/api/recipes');
 
     useEffect(() => {
         if (firstRender.current) {
@@ -80,7 +82,21 @@ export default function Index({
                         ))}
                     </select>
                 </div>
+                {/* SWR exercice usage below */}
+                {/* <button onClick={() => mutate()}>
+                    Refresh recipes
+                </button>
+                <h2>SWR recipes</h2>
 
+                {isLoading ? (
+                    <p>Loading recipes...</p>
+                ) : error ? (
+                    <p>Something went wrong: {error.message}</p>
+                ) : (
+                    data?.data?.map(recipe => (
+                        <p key={recipe.id}>{recipe.title}</p>
+                    ))
+                )} */}
                 {recipes?.data?.length === 0 ? (
                     <p>No recipes found.</p>
                 ) : (
