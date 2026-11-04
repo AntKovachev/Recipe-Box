@@ -26,23 +26,12 @@ export default function Index({
                 preserveState: true,
                 preserveScroll: true,
                 replace: true,
+                only: ['recipes']
             });
         }, 300);
 
         return () => clearTimeout(timeout);
     }, [searchTerm]);
-
-    function searchRecipes(e) {
-        e.preventDefault();
-
-        router.get('/recipes', {
-            search: searchTerm,
-            collection: selectedCollection || '',
-        }, {
-            preserveState: true,
-            preserveScroll: true,
-        });
-    }
 
     function filterByCollection(e) {
         router.get('/recipes', {
@@ -51,6 +40,8 @@ export default function Index({
         }, {
             preserveState: true,
             preserveScroll: true,
+            replace: true,
+            only: ['recipes', 'selectedCollection'],
         });
     }
 
@@ -61,7 +52,7 @@ export default function Index({
             <div>
                 <h1>Recipes</h1>
 
-                <form onSubmit={searchRecipes}>
+                <form>
                     <input
                         type="text"
                         placeholder="Search recipes..."
