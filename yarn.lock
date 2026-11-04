@@ -83,6 +83,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@inertiajs/vite@npm:^3.11.0":
+  version: 3.11.0
+  resolution: "@inertiajs/vite@npm:3.11.0"
+  dependencies:
+    "@inertiajs/core": "npm:3.11.0"
+    "@jridgewell/remapping": "npm:^2.3.5"
+    magic-string: "npm:^0.30.21"
+    tinyglobby: "npm:^0.2.15"
+  peerDependencies:
+    vite: ^7.0.0 || ^8.0.0
+  checksum: 4ca0bb1a9be59b990bb96d0e086858a4c918795cd588bf4f82b14a52f4ac625b51f2ac5db0a7730dd1c8a5e0d11ee1fdeafcc12e51a90fa6cdf2fe70c93190fa
+  languageName: node
+  linkType: hard
+
 "@isaacs/fs-minipass@npm:^4.0.0":
   version: 4.0.1
   resolution: "@isaacs/fs-minipass@npm:4.0.1"
@@ -1322,6 +1336,7 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@inertiajs/react": "npm:^3.11.0"
+    "@inertiajs/vite": "npm:^3.11.0"
     "@laravel/multiplex": "npm:^0.4.1"
     "@tailwindcss/vite": "npm:^4.0.0"
     "@vitejs/plugin-react": "npm:^6.2.1"
@@ -1497,7 +1512,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tinyglobby@npm:^0.2.12, tinyglobby@npm:^0.2.17":
+"tinyglobby@npm:^0.2.12, tinyglobby@npm:^0.2.15, tinyglobby@npm:^0.2.17":
   version: 0.2.17
   resolution: "tinyglobby@npm:0.2.17"
   dependencies:

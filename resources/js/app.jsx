@@ -2,6 +2,7 @@ import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import AppLayout from './Layouts/AppLayout';
+import { hydrateRoot } from 'react-dom/client';
 
 createInertiaApp({
     resolve: async name => {
@@ -18,7 +19,7 @@ createInertiaApp({
     },
 
     setup({ el, App, props }) {
-        createRoot(el).render(
+        hydrateRoot(el).render(
             <App {...props} />
         );
     },

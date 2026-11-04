@@ -3,11 +3,12 @@ import laravel from 'laravel-vite-plugin';
 import { bunny } from 'laravel-vite-plugin/fonts';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import inertia from '@inertiajs/vite';
 
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['app.jsx'],
+            input: ['resources/js/app.jsx'],
             refresh: true,
             fonts: [
                 bunny('Instrument Sans', {
@@ -19,6 +20,7 @@ export default defineConfig({
             include: /\.(js|jsx|ts|tsx)$/,
         }),
         tailwindcss(),
+        inertia()
     ],
     server: {
         watch: {
