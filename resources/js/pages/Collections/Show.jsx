@@ -17,7 +17,6 @@ export default function Show({ collection }) {
             <Head title={collection.name} />
 
             <div>
-                <Link href="/collections">Back to collections</Link>
 
                 <h1>{collection.name}</h1>
 

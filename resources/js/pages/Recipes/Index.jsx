@@ -1,7 +1,6 @@
 
 import { Head, Link, router } from '@inertiajs/react';
 import { useState } from 'react';
-import FlashMessage from '@/components/FlashMessage';
 
 export default function Index({
     recipes,
@@ -37,13 +36,8 @@ export default function Index({
         <>
             <Head title="Recipes" />
 
-            <FlashMessage/>
-
             <div>
                 <h1>Recipes</h1>
-                <Link href="/digests">
-                    Weekly Digests
-                </Link>
 
                 <form onSubmit={searchRecipes}>
                     <input

@@ -24,7 +24,6 @@ export default function Show({ recipe, collections, recipeCollections }) {
             <Head title={recipe.title} />
 
             <div>
-                <Link href="/recipes">Back to recipes</Link>
 
                 <h1>{recipe.title}</h1>
 

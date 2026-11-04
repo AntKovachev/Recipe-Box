@@ -19,7 +19,6 @@ export default function Index({ collections, collectionTypes }) {
             <Head title="My Collections" />
 
             <div>
-                <Link href="/recipes">Back to recipes</Link>
 
                 <h1>My Collections</h1>
 

@@ -35,8 +35,6 @@ export default function Create() {
             <div>
                 <h1>Create a Recipe</h1>
 
-                <Link href="/recipes">Back to recipes</Link>
-
                 <form onSubmit={submit}>
                     <div>
                         <label htmlFor="title">Title</label>
