@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
     'prep_time',
     'cook_time',
     'servings',
+    'user_id'
 ])]
 class Recipe extends Model
 {

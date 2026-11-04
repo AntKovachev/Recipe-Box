@@ -116,6 +116,7 @@ class RecipeController extends Controller
             'slug' => Str::slug($validated['title']) . '-' . Str::random(6),
         ]);
 
-        return redirect()->route('recipes.index');
+        return redirect()->route('recipes.index')
+            ->with('success', 'Recipe created successfully');
     }
 }
