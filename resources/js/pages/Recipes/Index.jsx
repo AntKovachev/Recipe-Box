@@ -1,6 +1,6 @@
 
 import { Head, Link, router } from '@inertiajs/react';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 export default function Index({
     recipes,
@@ -9,6 +9,27 @@ export default function Index({
     search,
 }) {
     const [searchTerm, setSearchTerm] = useState(search || '');
+    const firstRender = useRef(true);
+
+    useEffect(() => {
+        if (firstRender.current) {
+            firstRender.current = false;
+            return;
+        }
+
+        const timeout = setTimeout(() => {
+            router.get('/recipes', {
+                search: searchTerm,
+                collection: selectedCollection || '',
+            }, {
+                preserveState: true,
+                preserveScroll: true,
+                replace: true,
+            });
+        }, 300);
+
+        return () => clearTimeout(timeout);
+    }, [searchTerm]);
 
     function searchRecipes(e) {
         e.preventDefault();
@@ -46,8 +67,6 @@ export default function Index({
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
                     />
-
-                    <button type="submit">Search</button>
                 </form>
 
                 <div>
