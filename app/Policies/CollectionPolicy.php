@@ -5,7 +5,7 @@ namespace App\Policies;
 use App\Models\Collection;
 use App\Models\User;
 
-class CollectionPolicy
+class CollectionPolicy implements CollectionPolicyInterface
 {
     public function view(User $user, Collection $collection): bool
     {
@@ -17,12 +17,12 @@ class CollectionPolicy
         return $user->id === $collection->user_id;
     }
 
-    public function addRecipe(User $user, Collection $collection): bool
+    public function add(User $user, Collection $collection): bool
     {
         return $user->id === $collection->user_id;
     }
 
-    public function removeRecipe(User $user, Collection $collection): bool
+    public function remove(User $user, Collection $collection): bool
     {
         return $user->id === $collection->user_id;
     }

@@ -85,7 +85,7 @@ class CollectionController extends BaseController
      */
     public function addRecipe(Collection $collection, Recipe $recipe): RedirectResponse
     {
-        $this->authorize('addRecipe', $collection);
+        $this->authorize('add', $collection);
 
         DB::table('collection_recipe')->insertOrIgnore([
             'collection_id' => $collection->id,
@@ -100,7 +100,7 @@ class CollectionController extends BaseController
      */
     public function removeRecipe(Collection $collection, Recipe $recipe): RedirectResponse
     {
-        $this->authorize('removeRecipe', $collection);
+        $this->authorize('remove', $collection);
 
         DB::table('collection_recipe')
             ->where('collection_id', $collection->id)
