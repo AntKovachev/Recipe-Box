@@ -166,6 +166,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mantine/hooks@npm:^9.7.5":
+  version: 9.7.5
+  resolution: "@mantine/hooks@npm:9.7.5"
+  peerDependencies:
+    react: ^19.2.0
+  checksum: aa42d76547f5c405eccffb25e0112d143064f3c1d8739a4389bc0c751adc2992c28ee4537c4582b4a673b983f893d9f434fe22fc0352ba269963d43428483caf
+  languageName: node
+  linkType: hard
+
 "@napi-rs/wasm-runtime@npm:^1.1.4":
   version: 1.2.7
   resolution: "@napi-rs/wasm-runtime@npm:1.2.7"
@@ -1505,6 +1514,7 @@ __metadata:
     "@inertiajs/react": "npm:^3.11.0"
     "@inertiajs/vite": "npm:^3.11.0"
     "@laravel/multiplex": "npm:^0.4.1"
+    "@mantine/hooks": "npm:^9.7.5"
     "@tailwindcss/vite": "npm:^4.0.0"
     "@vitejs/plugin-react": "npm:^6.2.1"
     concurrently: "npm:^10.0.3"

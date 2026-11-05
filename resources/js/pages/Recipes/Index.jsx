@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import Pagination from '@/Components/Pagination';
 import useSWR from 'swr';
 import qs from 'qs';
+import { useDebouncedValue } from '@mantine/hooks';
 
 export default function Index({
     recipes,
@@ -12,13 +13,14 @@ export default function Index({
     search,
 }) {
     const [searchTerm, setSearchTerm] = useState(search || '');
+    const [debouncedSearch] = useDebouncedValue(searchTerm, 300);
     const [arrayFormat, setArrayFormat] = useState('indices');
 
     const firstRender = useRef(true);
 
     // Parameters for the SWR API request.
     const params = {
-        search: searchTerm,
+        search: debouncedSearch,
         collections: selectedCollection ? [selectedCollection] : [],
     };
 
@@ -38,20 +40,16 @@ export default function Index({
             return;
         }
 
-        const timeout = setTimeout(() => {
-            router.get('/recipes', {
-                search: searchTerm,
-                collection: selectedCollection || '',
-            }, {
-                preserveState: true,
-                preserveScroll: true,
-                replace: true,
-                only: ['recipes'],
-            });
-        }, 300);
-
-        return () => clearTimeout(timeout);
-    }, [searchTerm]);
+        router.get('/recipes', {
+            search: debouncedSearch,
+            collection: selectedCollection || '',
+        }, {
+            preserveState: true,
+            preserveScroll: true,
+            replace: true,
+            only: ['recipes'],
+        });
+    }, [debouncedSearch]);
 
     function filterByCollection(e) {
         router.get('/recipes', {
