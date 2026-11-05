@@ -2,7 +2,8 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { useState, useRef, useEffect } from 'react';
 import Pagination from '@/Components/Pagination';
-// import useSWR from 'swr';
+import useSWR from 'swr';
+import qs from 'qs';
 
 export default function Index({
     recipes,
@@ -11,8 +12,25 @@ export default function Index({
     search,
 }) {
     const [searchTerm, setSearchTerm] = useState(search || '');
+    const [arrayFormat, setArrayFormat] = useState('indices');
+
     const firstRender = useRef(true);
-    // const { data, error, isLoading, mutate } = useSWR('/api/recipes');
+
+    // Parameters for the SWR API request.
+    const params = {
+        search: searchTerm,
+        collections: selectedCollection ? [selectedCollection] : [],
+    };
+
+    // Serialize parameters using qs.
+    const queryString = qs.stringify(params, {
+        arrayFormat,
+    });
+
+    const apiUrl = `/api/recipes?${queryString}`;
+
+    // Fetch recipes from the API using SWR.
+    const { data, error, isLoading, mutate } = useSWR(apiUrl);
 
     useEffect(() => {
         if (firstRender.current) {
@@ -28,7 +46,7 @@ export default function Index({
                 preserveState: true,
                 preserveScroll: true,
                 replace: true,
-                only: ['recipes']
+                only: ['recipes'],
             });
         }, 300);
 
@@ -82,11 +100,34 @@ export default function Index({
                         ))}
                     </select>
                 </div>
-                {/* SWR exercice usage below */}
-                {/* <button onClick={() => mutate()}>
-                    Refresh recipes
+
+                <hr />
+
+                <h2>qs + SWR experiment</h2>
+
+                <label>Array format:</label>
+
+                <select
+                    value={arrayFormat}
+                    onChange={e => setArrayFormat(e.target.value)}
+                >
+                    <option value="indices">Indices</option>
+                    <option value="brackets">Brackets</option>
+                    <option value="repeat">Repeat</option>
+                    <option value="comma">Comma</option>
+                </select>
+
+                <p>Query string: {queryString}</p>
+                <p>Request URL: {apiUrl}</p>
+
+                <button
+                    type="button"
+                    onClick={() => mutate()}
+                >
+                    Refresh API recipes
                 </button>
-                <h2>SWR recipes</h2>
+
+                <h3>API recipes</h3>
 
                 {isLoading ? (
                     <p>Loading recipes...</p>
@@ -96,7 +137,12 @@ export default function Index({
                     data?.data?.map(recipe => (
                         <p key={recipe.id}>{recipe.title}</p>
                     ))
-                )} */}
+                )}
+
+                <hr />
+
+                <h2>Recipes</h2>
+
                 {recipes?.data?.length === 0 ? (
                     <p>No recipes found.</p>
                 ) : (
@@ -107,15 +153,14 @@ export default function Index({
                                     {recipe.title}
                                 </Link>
                             </h2>
+
                             <p>By {recipe.user.name}</p>
                             <p>{recipe.description}</p>
                         </div>
                     ))
                 )}
 
-                <div>
-                    <Pagination links={recipes.links} />
-                </div>
+                <Pagination links={recipes.links} />
             </div>
         </>
     );
