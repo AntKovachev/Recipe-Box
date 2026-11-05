@@ -38,9 +38,9 @@ class Recipe extends Model implements HasMedia
     }
 
     #[Scope]
-    protected function search(Builder $query, string $search): void
+    protected function search(Builder $query, string $search): Builder
     {
-        $query->where(function (Builder $query) use ($search) {
+        return $query->where(function (Builder $query) use ($search) {
             $query->where('title', 'ilike', "%{$search}%")
                 ->orWhere('description', 'ilike', "%{$search}%");
         });
