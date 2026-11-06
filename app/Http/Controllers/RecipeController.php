@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RecipeRequest;
 use App\Http\Resources\RecipeResource;
+use App\Jobs\ProcessRecipeJob;
 use App\Models\Collection;
 use App\Models\Recipe;
 use Illuminate\Database\Eloquent\Builder;
@@ -135,6 +136,9 @@ class RecipeController extends Controller
                 ->addMedia($image)
                 ->toMediaCollection('recipe-images');
         }
+
+        // ProcessRecipeJob::dispatch($recipe->id); This is for async
+        ProcessRecipeJob::dispatchSync($recipe->id);
 
         return redirect()->route('recipes.index')
             ->with('success', 'Recipe created successfully');
