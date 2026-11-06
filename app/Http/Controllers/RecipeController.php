@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RecipeRequest;
 use App\Http\Resources\RecipeResource;
 use App\Jobs\ProcessRecipeJob;
+use App\Mail\RecipeCreated;
 use App\Models\Collection;
 use App\Models\Recipe;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,6 +16,7 @@ use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Mail;
 
 class RecipeController extends Controller
 {
@@ -139,6 +141,10 @@ class RecipeController extends Controller
 
         // ProcessRecipeJob::dispatch($recipe->id); This is for async
         ProcessRecipeJob::dispatch($recipe->id);
+
+        Mail::to('ak@cfmmedia.de')->send(
+            new RecipeCreated($recipe)
+        );
 
         return redirect()->route('recipes.index')
             ->with('success', 'Recipe created successfully');
