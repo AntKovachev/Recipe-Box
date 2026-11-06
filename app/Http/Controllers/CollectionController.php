@@ -13,6 +13,7 @@ use Inertia\Response;
 use App\Http\Resources\CollectionResource;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Cache;
 
 class CollectionController extends BaseController
 {
@@ -23,14 +24,27 @@ class CollectionController extends BaseController
      */
     public function index(): Response
     {
-        $collections = Collection::query()
-            ->where('user_id', auth()->id())
-            ->withCount('recipes')
-            ->latest()
-            ->get();
+        $userId = auth()->id();
+
+        $collections = Cache::store('redis')
+            ->tags(['collections', "collections-user-{$userId}"])
+            ->remember(
+                "collections.index.user.{$userId}",
+                now()->addMinutes(5),
+                fn () => Collection::query()
+                    ->where('user_id', $userId)
+                    ->withCount('recipes')
+                    ->with('user:id,name')
+                    ->latest()
+                    ->get()
+                    ->map(fn (Collection $collection) =>
+                        (new CollectionResource($collection))->resolve()
+                    )
+                    ->all()
+            );
 
         return Inertia::render('Collections/Index', [
-            'collections' => CollectionResource::collection($collections),
+            'collections' => $collections,
             'collectionTypes' => collect(CollectionType::cases())
                 ->map(fn (CollectionType $type) => [
                     'value' => $type->value,

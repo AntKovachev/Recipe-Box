@@ -13,6 +13,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Support\Facades\Cache;
 
 class RecipeController extends Controller
 {
@@ -29,28 +30,42 @@ class RecipeController extends Controller
                 ->get(['id', 'name'])
             : collect();
 
-        $query = Recipe::query()
-            ->with('user:id,name')
-            ->latest();
+        $filters = $request->only(['search', 'collection', 'page']);
 
-        if ($request->filled('search')) {
-            $query->search($request->input('search'));
-        }
+        $userId = $user?->id ?? 'guest';
 
-        if ($request->filled('collection') && $user) {
-            $collectionId = $request->input('collection');
-
-            $query->whereHas('collections', function (Builder $query) use ($collectionId, $user) {
-                $query->where('collections.id', $collectionId)
-                    ->where('collections.user_id', $user->id);
-            });
-        }
-
-        $recipes = $query->paginate(10)->withQueryString();
-
-        $recipes->through(
-            fn ($recipe) => (new RecipeResource($recipe))->resolve()
+        $cacheKey = 'recipes.index.user.' . $userId . '.' . md5(
+            http_build_query($filters)
         );
+
+        $recipes = Cache::store('redis')
+            ->tags(['recipes'])
+            ->remember($cacheKey, now()->addMinutes(5), function () use ($request, $user) {
+                $query = Recipe::query()
+                    ->with('user:id,name')
+                    ->latest();
+
+                if ($request->filled('search')) {
+                    $query->search($request->input('search'));
+                }
+
+                if ($request->filled('collection') && $user) {
+                    $collectionId = $request->input('collection');
+
+                    $query->whereHas('collections', function (Builder $query) use ($collectionId, $user) {
+                        $query->where('collections.id', $collectionId)
+                            ->where('collections.user_id', $user->id);
+                    });
+                }
+
+                $recipes = $query->paginate(10)->withQueryString();
+
+                $recipes->through(
+                    fn ($recipe) => (new RecipeResource($recipe))->resolve()
+                );
+               
+                return $recipes->toArray();
+            });
 
         return Inertia::render('Recipes/Index', [
             'recipes' => $recipes,
