@@ -138,7 +138,7 @@ class RecipeController extends Controller
         }
 
         // ProcessRecipeJob::dispatch($recipe->id); This is for async
-        ProcessRecipeJob::dispatchSync($recipe->id);
+        ProcessRecipeJob::dispatch($recipe->id);
 
         return redirect()->route('recipes.index')
             ->with('success', 'Recipe created successfully');

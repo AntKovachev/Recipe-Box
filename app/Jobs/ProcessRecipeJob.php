@@ -28,21 +28,14 @@ class ProcessRecipeJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $attempt = $this->attempts();
-
-        Log::info('Processing recipe', [
+        Log::info('Recipe job started', [
             'recipe_id' => $this->recipeId,
-            'attempt' => $attempt,
+            'attempt' => $this->attempts(),
         ]);
 
-        //This should be commented out because it will fail the job immediately on sync
-        // if ($attempt < 3) {
-        //     throw new RuntimeException(
-        //         "Intentional failure on attempt {$attempt}"
-        //     );
-        // }
+        sleep(10);
 
-        Log::info('Recipe processed successfully', [
+        Log::info('Recipe job completed', [
             'recipe_id' => $this->recipeId,
         ]);
     }
