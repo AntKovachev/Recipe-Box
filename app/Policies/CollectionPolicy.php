@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Collection;
 use App\Models\User;
+use App\Repositories\Contracts\CollectionPolicyInterface;
 
 class CollectionPolicy implements CollectionPolicyInterface
 {

@@ -17,6 +17,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
+use App\Services\RecipeService;
 
 class RecipeController extends Controller
 {
@@ -120,30 +121,11 @@ class RecipeController extends Controller
     /**
      * Store a newly created recipe.
      */
-    public function store(RecipeRequest $request): RedirectResponse
+    public function store(RecipeRequest $request, RecipeService $recipeService): RedirectResponse
     {
-        $validated = $request->validated();
-
-        $image = $validated['image'] ?? null;
-        unset($validated['image']);
-        
-        $recipe = Recipe::query()->create([
-            ...$validated,
-            'user_id' => $request->user()->id,
-            'slug' => Str::slug($validated['title']) . '-' . Str::random(6),
-        ]);
-
-        if ($image) {
-            $recipe
-                ->addMedia($image)
-                ->toMediaCollection('recipe-images');
-        }
-
-        // ProcessRecipeJob::dispatch($recipe->id); This is for async
-        ProcessRecipeJob::dispatch($recipe->id);
-
-        Mail::to('ak@cfmmedia.de')->send(
-            new RecipeCreated($recipe)
+        $recipeService->create(
+            $request->validated(),
+            $request->user()
         );
 
         return redirect()->route('recipes.index')

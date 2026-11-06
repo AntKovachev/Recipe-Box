@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Policies;
+namespace App\Repositories\Contracts;
 
 use App\Models\Collection;
 use App\Models\User;
