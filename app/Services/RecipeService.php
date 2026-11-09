@@ -3,11 +3,9 @@
 namespace App\Services;
 
 use App\Jobs\ProcessRecipeJob;
-use App\Mail\RecipeCreated;
 use App\Models\Recipe;
 use App\Models\User;
 use App\Repositories\Contracts\RecipeRepositoryInterface;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class RecipeService
@@ -34,10 +32,6 @@ class RecipeService
         }
 
         ProcessRecipeJob::dispatch($recipe->id);
-
-        Mail::to($user->email)->send(
-            new RecipeCreated($recipe)
-        );
 
         return $recipe;
     }

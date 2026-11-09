@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Recipe;
+use App\Observers\RecipeObserver;
 use App\Repositories\Contracts\RecipeRepositoryInterface;
 use App\Repositories\RecipeRepository;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -29,5 +31,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         JsonResource::withoutWrapping();
+
+        Recipe::observe(RecipeObserver::class);
     }
 }
