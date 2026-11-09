@@ -585,6 +585,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chokidar@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "chokidar@npm:6.0.0"
+  dependencies:
+    readdirp: "npm:^5.1.1"
+  checksum: 75651391e81b0cf7efa8ec373b68afaf1ad13283e8cae01737976bd0ff72fcb5afac75942ac3c07393d414269737229eb7648d74d32a1373764ecd0711b626b9
+  languageName: node
+  linkType: hard
+
 "chownr@npm:^3.0.0":
   version: 3.0.0
   resolution: "chownr@npm:3.0.0"
@@ -1439,6 +1448,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"readdirp@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "readdirp@npm:5.1.1"
+  checksum: 5e99755684b9104761e48801828f4d2614efa33b1698629929c5985184dc63a7f8233c827832c40dc7be16b00cc871d303cf9de396d2fb74b9465ee2aa2424a1
+  languageName: node
+  linkType: hard
+
 "restore-cursor@npm:^4.0.0":
   version: 4.0.0
   resolution: "restore-cursor@npm:4.0.0"
@@ -1517,6 +1533,7 @@ __metadata:
     "@mantine/hooks": "npm:^9.7.5"
     "@tailwindcss/vite": "npm:^4.0.0"
     "@vitejs/plugin-react": "npm:^6.2.1"
+    chokidar: "npm:^6.0.0"
     concurrently: "npm:^10.0.3"
     laravel-vite-plugin: "npm:^3.1"
     qs: "npm:^6.17.1"

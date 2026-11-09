@@ -5,6 +5,7 @@ use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\WeeklyDigestController;
+use App\Services\OctaneStateTest;
 
 Route::get('/', function () {
     return redirect()->route('recipes.index');
@@ -67,4 +68,11 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 Route::get('/test-error', function () {
     abort(404);
+});
+
+Route::get('/octane-test', function (OctaneStateTest $service) {
+    return response()->json([
+        'counter' => $service->increment(),
+        'worker_pid' => getmypid()
+    ]);
 });

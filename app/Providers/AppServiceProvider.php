@@ -6,6 +6,7 @@ use App\Repositories\Contracts\RecipeRepositoryInterface;
 use App\Repositories\RecipeRepository;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\ServiceProvider;
+use App\Services\OctaneStateTest;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
             RecipeRepositoryInterface::class,
             RecipeRepository::class
         );
+
+        $this->app->scoped(OctaneStateTest::class);
     }
 
     /**

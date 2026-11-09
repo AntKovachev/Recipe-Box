@@ -36,6 +36,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 return Inertia::render('Error', [
                     'status' => $response->getStatusCode(),
                 ])
+                    ->rootView('welcome')
                     ->toResponse($request)
                     ->setStatusCode($response->getStatusCode());
             }
