@@ -9,6 +9,7 @@ use App\Repositories\RecipeRepository;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\ServiceProvider;
 use App\Services\OctaneStateTest;
+use App\Services\RecipeStatsService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,11 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->scoped(OctaneStateTest::class);
+
+        $this->app->singleton(
+            RecipeStatsService::class,
+            fn () => new RecipeStatsService()
+        );
     }
 
     /**
