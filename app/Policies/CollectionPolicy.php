@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Collection;
 use App\Models\User;
+use App\Nova\Collection as NovaCollection;
 use App\Repositories\Contracts\CollectionPolicyInterface;
 
 class CollectionPolicy implements CollectionPolicyInterface
@@ -26,5 +27,10 @@ class CollectionPolicy implements CollectionPolicyInterface
     public function remove(User $user, Collection $collection): bool
     {
         return $user->id === $collection->user_id;
+    }
+    //This method is needed for Nova admin panel
+    public function create(User $user): bool
+    {
+        return true;
     }
 }
