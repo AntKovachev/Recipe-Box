@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\UpdateCookTime;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -12,6 +13,7 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
 use Laravel\Nova\Fields\MorphMany;
+use App\Nova\Actions\UpdateRecipeServings;
 
 class Recipe extends Resource
 {
@@ -85,7 +87,7 @@ class Recipe extends Resource
                 ->maxSizeInBytes(5 * 1024 * 1024)
                 ->mediaOnIndex(1),
 
-            MorphMany::make('Media', 'media', Media::class),    
+            MorphMany::make('Media', 'media', Media::class),   
         ];
     }
 
@@ -126,6 +128,9 @@ class Recipe extends Resource
      */
     public function actions(NovaRequest $request): array
     {
-        return [];
+        return [
+            new UpdateRecipeServings(),
+            new UpdateCookTime()
+        ];
     }
 }
