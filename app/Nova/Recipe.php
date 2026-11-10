@@ -10,7 +10,7 @@ use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
-
+use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
 
 class Recipe extends Resource
 {
@@ -78,6 +78,11 @@ class Recipe extends Resource
                 ->rules('required'),
 
             BelongsToMany::make('Collections'),
+
+            Medialibrary::make('Recipe image', 'recipe-images')
+                ->accept('image/*')
+                ->maxSizeInBytes(5 * 1024 * 1024)
+                ->mediaOnIndex(1)
         ];
     }
 
