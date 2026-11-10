@@ -16,7 +16,9 @@ use Laravel\Nova\Fields\MorphMany;
 use App\Nova\Actions\UpdateRecipeServings;
 use App\Nova\Filters\RecipeCookTime;
 use App\Nova\Filters\RecipeServingSize;
-
+use App\Nova\Metrics\TotalRecipes;
+use App\Nova\Metrics\QuickRecipes;
+use App\Nova\Metrics\RecipesCreatedOverTime;
 class Recipe extends Resource
 {
 
@@ -100,7 +102,11 @@ class Recipe extends Resource
      */
     public function cards(NovaRequest $request): array
     {
-        return [new Help()];
+        return [
+            new TotalRecipes(),
+            new QuickRecipes(),
+            new RecipesCreatedOverTime()
+        ];
     }
 
     /**
