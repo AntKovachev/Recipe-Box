@@ -10,6 +10,8 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
+use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
+use Laravel\Nova\Fields\MorphMany;
 
 class Collection extends Resource
 {
@@ -67,6 +69,13 @@ class Collection extends Resource
                 ->rules('required'),
 
             BelongsToMany::make('Recipes'),
+
+            Medialibrary::make('Collection Cover', 'collection-images')
+                ->accept('image/*')
+                ->maxSizeInBytes(5 * 1024 * 1024)
+                ->mediaOnIndex(1),
+
+            MorphMany::make('Media', 'media', Media::class),
         ];
     }
 

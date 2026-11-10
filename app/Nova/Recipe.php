@@ -11,6 +11,7 @@ use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
+use Laravel\Nova\Fields\MorphMany;
 
 class Recipe extends Resource
 {
@@ -82,7 +83,9 @@ class Recipe extends Resource
             Medialibrary::make('Recipe image', 'recipe-images')
                 ->accept('image/*')
                 ->maxSizeInBytes(5 * 1024 * 1024)
-                ->mediaOnIndex(1)
+                ->mediaOnIndex(1),
+
+            MorphMany::make('Media', 'media', Media::class),    
         ];
     }
 
