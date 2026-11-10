@@ -14,6 +14,8 @@ use Laravel\Nova\Fields\BelongsToMany;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
 use Laravel\Nova\Fields\MorphMany;
 use App\Nova\Actions\UpdateRecipeServings;
+use App\Nova\Filters\RecipeCookTime;
+use App\Nova\Filters\RecipeServingSize;
 
 class Recipe extends Resource
 {
@@ -108,7 +110,10 @@ class Recipe extends Resource
      */
     public function filters(NovaRequest $request): array
     {
-        return [];
+        return [
+            new RecipeCookTime(),
+            new RecipeServingSize()
+        ];
     }
 
     /**
