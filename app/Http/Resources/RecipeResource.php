@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Mews\Purifier\Facades\Purifier;
 
 class RecipeResource extends JsonResource
 {
@@ -16,6 +17,9 @@ class RecipeResource extends JsonResource
             'description' => $this->description,
             'image_path' => $this->image_path,
             'instructions' => $this->instructions,
+            'instructions_html' => Purifier::clean(
+                $this->instructions ?? '',
+            ),
             'prep_time' => $this->prep_time,
             'cook_time' => $this->cook_time,
             'servings' => $this->servings,

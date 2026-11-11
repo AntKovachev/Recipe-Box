@@ -5,6 +5,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { SWRConfig } from 'swr';
 import { fetcher } from './lib/fetcher';
 import AppLayout from './Layouts/AppLayout';
+import '../css/app.css';
 
 createInertiaApp({
     resolve: async name => {

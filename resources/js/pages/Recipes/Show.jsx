@@ -1,4 +1,6 @@
 import { Head, Link, useForm } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
+import DOMPurify from 'dompurify';
 
 export default function Show({ recipe, collections, recipeCollections }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -12,7 +14,13 @@ export default function Show({ recipe, collections, recipeCollections }) {
             onSuccess: () => reset(),
         });
     }
+    const [sanitizedInstructions, setSanitizedInstructions] = useState('');
 
+    useEffect(() => {
+        setSanitizedInstructions(
+            DOMPurify.sanitize(recipe.instructions ?? '')
+        );
+    }, [recipe.instructions]);
     return (
         <>
             <Head title={recipe.title} />
@@ -70,14 +78,29 @@ export default function Show({ recipe, collections, recipeCollections }) {
                 </div>
 
                 {/* Instructions */}
+                {/* Instructions */}
                 <section className="mb-10">
                     <h2 className="text-2xl font-semibold mb-4">
                         Instructions
                     </h2>
 
-                    <p className="text-gray-700 leading-7 whitespace-pre-line">
-                        {recipe.instructions}
-                    </p>
+                    <div
+                        className="text-gray-700 leading-7
+                                [&_p]:mb-4
+                                [&_strong]:font-bold
+                                [&_em]:italic
+                                [&_h1]:text-3xl
+                                [&_h1]:font-bold
+                                [&_h2]:text-2xl
+                                [&_h2]:font-semibold
+                                [&_ul]:list-disc
+                                [&_ol]:list-decimal
+                                [&_ul]:pl-6
+                                [&_ol]:pl-6"
+                        dangerouslySetInnerHTML={{
+                            __html: sanitizedInstructions,
+                        }}
+                    />
                 </section>
 
                 {/* Collections */}

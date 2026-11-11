@@ -21,6 +21,7 @@ use App\Nova\Metrics\QuickRecipes;
 use App\Nova\Metrics\RecipesCreatedOverTime;
 use NovaItemsField\Items;
 use Outl1ne\NovaSortable\Traits\HasSortableRows;
+use Marshmallow\Tiptap\Tiptap;
 
 class Recipe extends Resource
 {
@@ -72,7 +73,7 @@ class Recipe extends Resource
             Textarea::make('Description')
                 ->rules('nullable', 'string'),
 
-            Textarea::make('Instructions')
+            Tiptap::make('Instructions')
                 ->rules('nullable', 'string'),
 
             Number::make('Prep Time')
