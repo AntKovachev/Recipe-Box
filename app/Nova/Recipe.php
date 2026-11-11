@@ -19,6 +19,8 @@ use App\Nova\Filters\RecipeServingSize;
 use App\Nova\Metrics\TotalRecipes;
 use App\Nova\Metrics\QuickRecipes;
 use App\Nova\Metrics\RecipesCreatedOverTime;
+use NovaItemsField\Items;
+
 class Recipe extends Resource
 {
 
@@ -92,6 +94,12 @@ class Recipe extends Resource
                 ->mediaOnIndex(1),
 
             MorphMany::make('Media', 'media', Media::class),   
+
+            Items::make('Ingredients')
+                ->draggable() //Allows rearranging ingredients
+                ->placeholder('Enter an ingredient')
+                ->createButtonValue('Add Ingredient')
+                ->indexAsList(), //Display ingredient instead of their count
         ];
     }
 

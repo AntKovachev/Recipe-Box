@@ -45,4 +45,11 @@ class Recipe extends Model implements HasMedia
                 ->orWhere('description', 'ilike', "%{$search}%");
         });
     }
+
+    protected function casts(): array
+    {
+        return [
+            'ingredients' => 'array'
+        ];
+    }
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ff2dac9487f32ca751830a2b150e99cd",
+    "content-hash": "ef5e344047066b9c7b03f98255d892e0",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -61,6 +61,57 @@
             },
             "time": "2026-04-05T21:06:35+00:00",
             "published-time": "2026-04-05T21:07:28+00:00"
+        },
+        {
+            "name": "blendbyte/nova-items-field",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/blendbyte/nova-items-field.git",
+                "reference": "2264491fa30a91c86973f48a14592166639230ae"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/blendbyte/nova-items-field/zipball/2264491fa30a91c86973f48a14592166639230ae",
+                "reference": "2264491fa30a91c86973f48a14592166639230ae",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "laravel/nova": "^5.0",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "laravel/nova-devtool": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "NovaItemsField\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "NovaItemsField\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Nova field to handle array columns",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/blendbyte/nova-items-field/issues",
+                "source": "https://github.com/blendbyte/nova-items-field/tree/2.0.1"
+            },
+            "time": "2025-05-12T09:36:45+00:00",
+            "published-time": "2025-05-12T09:37:18+00:00"
         },
         {
             "name": "brick/math",
