@@ -20,9 +20,11 @@ use App\Nova\Metrics\TotalRecipes;
 use App\Nova\Metrics\QuickRecipes;
 use App\Nova\Metrics\RecipesCreatedOverTime;
 use NovaItemsField\Items;
+use Outl1ne\NovaSortable\Traits\HasSortableRows;
 
 class Recipe extends Resource
 {
+    use HasSortableRows;
 
     /**
      * The model the resource corresponds to.

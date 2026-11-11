@@ -16,6 +16,7 @@
         "laravel/octane": "^2.23",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^3.0",
+        "outl1ne/nova-sortable": "^4.0",
         "spatie/laravel-medialibrary": "^11.23",
         "spiral/roadrunner-cli": "^2.6.0",
         "spiral/roadrunner-http": "^3.3.0"

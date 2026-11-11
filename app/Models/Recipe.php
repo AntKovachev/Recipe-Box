@@ -10,6 +10,8 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
 #[Fillable([
     'title',
@@ -22,10 +24,16 @@ use Illuminate\Database\Eloquent\Builder;
     'servings',
     'user_id'
 ])]
-class Recipe extends Model implements HasMedia
+class Recipe extends Model implements HasMedia, Sortable
 {
     use InteractsWithMedia;
+    use SortableTrait;
    
+    public $sortable = [
+        'order_column_name' => 'sort_order',
+        'sort_when_creating' => true,
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
