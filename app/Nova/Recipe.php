@@ -22,10 +22,12 @@ use App\Nova\Metrics\RecipesCreatedOverTime;
 use NovaItemsField\Items;
 use Outl1ne\NovaSortable\Traits\HasSortableRows;
 use Marshmallow\Tiptap\Tiptap;
+use Outl1ne\NovaTranslatable\HandlesTranslatable;
 
 class Recipe extends Resource
 {
     use HasSortableRows;
+    use HandlesTranslatable;
 
     /**
      * The model the resource corresponds to.
@@ -64,17 +66,23 @@ class Recipe extends Resource
 
             Text::make('Title')
                 ->sortable()
-                ->rules('required', 'max:255'),
+                ->translatable()
+                ->rules('required', 'max:255')
+                ->rulesFor('en', ['required']),
 
             Text::make('Slug')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
             Textarea::make('Description')
-                ->rules('nullable', 'string'),
+                ->translatable()
+                ->rules('nullable', 'string')
+                ->rulesFor('en', ['required']),
 
             Tiptap::make('Instructions')
-                ->rules('nullable', 'string'),
+                ->translatable()
+                ->rules('nullable', 'string')
+                ->rulesFor('en', ['required']),
 
             Number::make('Prep Time')
                 ->rules('nullable', 'integer', 'min:0'),

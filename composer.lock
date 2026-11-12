@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f821051f0ff627e2c586b7591267e314",
+    "content-hash": "c9da2e110ac4b71356aedbf501187a65",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -4296,6 +4296,73 @@
             "published-time": "2026-07-10T09:31:28+00:00"
         },
         {
+            "name": "outl1ne/nova-translatable",
+            "version": "3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/outl1ne/nova-translatable.git",
+                "reference": "8edfe2b387dac8b02e5e370abdea6f31520ccfb0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/outl1ne/nova-translatable/zipball/8edfe2b387dac8b02e5e370abdea6f31520ccfb0",
+                "reference": "8edfe2b387dac8b02e5e370abdea6f31520ccfb0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "spatie/laravel-translatable": "^4.0 || ^5.0 || ^6.0 || ^7.0"
+            },
+            "require-dev": {
+                "laravel/nova-devtool": "^1.0",
+                "nunomaduro/collision": "^7.8",
+                "orchestra/testbench": "^8.30|^9.8"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Outl1ne\\NovaTranslatable\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Outl1ne\\NovaTranslatable\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tarvo Reinpalu",
+                    "email": "tarvoreinpalu@gmail.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Outl1ne",
+                    "email": "info@outl1ne.com",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "A laravel-translatable extension for Laravel Nova.",
+            "keywords": [
+                "i18n",
+                "laravel",
+                "nova",
+                "translatable",
+                "translate"
+            ],
+            "support": {
+                "issues": "https://github.com/outl1ne/nova-translatable/issues",
+                "source": "https://github.com/outl1ne/nova-translatable/tree/3.1.0"
+            },
+            "time": "2026-04-27T10:49:30+00:00",
+            "published-time": "2026-04-27T10:50:27+00:00"
+        },
+        {
             "name": "outl1ne/nova-translations-loader",
             "version": "5.0.3",
             "source": {
@@ -6126,6 +6193,91 @@
             ],
             "time": "2026-09-28T07:16:50+00:00",
             "published-time": "2026-09-28T07:17:01+00:00"
+        },
+        {
+            "name": "spatie/laravel-translatable",
+            "version": "6.15.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-translatable.git",
+                "reference": "7d7c3c8f7c67eb13ea4e961261dd7bfdd0cfa68e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-translatable/zipball/7d7c3c8f7c67eb13ea4e961261dd7bfdd0cfa68e",
+                "reference": "7d7c3c8f7c67eb13ea4e961261dd7bfdd0cfa68e",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "php": "^8.4",
+                "spatie/laravel-package-tools": "^1.93.0"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.32",
+                "mockery/mockery": "^1.6.12",
+                "orchestra/testbench": "^10.0|^11.0",
+                "pestphp/pest": "^4.7|^5.3"
+            },
+            "type": "library",
+            "extra": {
+                "aliases": {
+                    "Translatable": "Spatie\\Translatable\\Facades\\Translatable"
+                },
+                "laravel": {
+                    "providers": [
+                        "Spatie\\Translatable\\TranslatableServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Translatable\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Sebastian De Deyne",
+                    "email": "sebastian@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A trait to make an Eloquent model hold translations",
+            "homepage": "https://github.com/spatie/laravel-translatable",
+            "keywords": [
+                "eloquent",
+                "i8n",
+                "laravel-translatable",
+                "model",
+                "multilingual",
+                "spatie",
+                "translate"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/laravel-translatable/issues",
+                "source": "https://github.com/spatie/laravel-translatable/tree/6.15.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-10-19T00:09:37+00:00",
+            "published-time": "2026-10-19T00:10:15+00:00"
         },
         {
             "name": "spatie/php-structure-discoverer",

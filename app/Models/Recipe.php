@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
+use Spatie\Translatable\HasTranslations;
 
 #[Fillable([
     'title',
@@ -28,12 +29,17 @@ class Recipe extends Model implements HasMedia, Sortable
 {
     use InteractsWithMedia;
     use SortableTrait;
+    use HasTranslations;
    
     public $sortable = [
         'order_column_name' => 'sort_order',
         'sort_when_creating' => true,
     ];
-
+    public $translatable = [
+        'title',
+        'description',
+        'instructions',
+    ];
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -48,9 +54,16 @@ class Recipe extends Model implements HasMedia, Sortable
     #[Scope]
     protected function search(Builder $query, string $search): Builder
     {
-        return $query->where(function (Builder $query) use ($search) {
-            $query->where('title', 'ilike', "%{$search}%")
-                ->orWhere('description', 'ilike', "%{$search}%");
+        $locale = app()->getLocale();
+
+        return $query->where(function (Builder $query) use ($search, $locale) {
+            $query->whereRaw(
+                "title->>? ILIKE ?",
+                [$locale, "%{$search}%"]
+            )->orWhereRaw(
+                "description->>? ILIKE ?",
+                [$locale, "%{$search}%"]
+            );
         });
     }
 
