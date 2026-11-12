@@ -23,8 +23,10 @@
         "spatie/laravel-backup": "^10.4",
         "spatie/laravel-health": "^1.41",
         "spatie/laravel-medialibrary": "^11.23",
+        "spatie/nova-backup-tool": "^6.0",
         "spiral/roadrunner-cli": "^2.6.0",
-        "spiral/roadrunner-http": "^3.3.0"
+        "spiral/roadrunner-http": "^3.3.0",
+        "stepanenko3/nova-health": "^1.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

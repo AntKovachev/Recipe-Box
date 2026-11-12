@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Gate;
 use Laravel\Fortify\Features;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
+use Spatie\Backup\BackupDestination\Backup;
+use Stepanenko3\NovaHealth\NovaHealth;
+use Spatie\BackupTool\BackupTool;
 
 class NovaServiceProvider extends NovaApplicationServiceProvider
 {
@@ -80,7 +83,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     public function tools(): array
     {
-        return [];
+        return [new BackupTool(), new NovaHealth()];
     }
 
     /**

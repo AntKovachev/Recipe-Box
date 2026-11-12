@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f2738598a0995109e492315ba8d7594b",
+    "content-hash": "d18e0a34e18338115bb8c388f1168f3f",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -5730,6 +5730,72 @@
             "published-time": "2026-10-21T19:33:25+00:00"
         },
         {
+            "name": "spatie/cpu-load-health-check",
+            "version": "1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/cpu-load-health-check.git",
+                "reference": "d2b89e406bd5e158bf9e3f5e9688b6d4afbf6ff1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/cpu-load-health-check/zipball/d2b89e406bd5e158bf9e3f5e9688b6d4afbf6ff1",
+                "reference": "d2b89e406bd5e158bf9e3f5e9688b6d4afbf6ff1",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "nunomaduro/collision": "^5.10|^6.1|^7.0|^8.0",
+                "pestphp/pest": "^1.21|^2.3|^3.0|4.0",
+                "pestphp/pest-plugin-laravel": "^1.21|^2.3|^3.0|^4.0",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^1.0|^2.0",
+                "phpstan/phpstan-phpunit": "^1.0|^2.0",
+                "phpunit/phpunit": "^9.5|^10.5|^11.0|^12.0",
+                "spatie/laravel-health": "^1.2",
+                "spatie/laravel-ray": "^1.26"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\CpuLoadHealthCheck\\": "src",
+                    "Spatie\\CpuLoadHealthCheck\\Database\\Factories\\": "database/factories"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A Laravel Health check to monitor CPU load",
+            "homepage": "https://github.com/spatie/cpu-load-health-check",
+            "keywords": [
+                "cpu-load-health-check",
+                "laravel",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/cpu-load-health-check/issues",
+                "source": "https://github.com/spatie/cpu-load-health-check/tree/1.0.5"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-11-12T10:37:29+00:00",
+            "published-time": "2025-11-12T10:37:53+00:00"
+        },
+        {
             "name": "spatie/db-dumper",
             "version": "4.1.1",
             "source": {
@@ -6695,6 +6761,128 @@
             "published-time": "2026-10-19T00:10:15+00:00"
         },
         {
+            "name": "spatie/macroable",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/macroable.git",
+                "reference": "2967f69810ba4df158391665c0850010b9d1507c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/macroable/zipball/2967f69810ba4df158391665c0850010b9d1507c",
+                "reference": "2967f69810ba4df158391665c0850010b9d1507c",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.3"
+            },
+            "require-dev": {
+                "pestphp/pest": "^4",
+                "phpunit/phpunit": "^12"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Macroable\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A trait to dynamically add methods to a class",
+            "homepage": "https://github.com/spatie/macroable",
+            "keywords": [
+                "macroable",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/macroable/issues",
+                "source": "https://github.com/spatie/macroable/tree/2.1.0"
+            },
+            "time": "2026-01-30T17:13:34+00:00",
+            "published-time": "2026-01-30T18:06:57+00:00"
+        },
+        {
+            "name": "spatie/nova-backup-tool",
+            "version": "6.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/nova-backup-tool.git",
+                "reference": "83a051a56f309d60ef50e30ca3cb731c4d408802"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/nova-backup-tool/zipball/83a051a56f309d60ef50e30ca3cb731c4d408802",
+                "reference": "83a051a56f309d60ef50e30ca3cb731c4d408802",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^12.0|^13.0",
+                "laravel/nova": "^5.0",
+                "nesbot/carbon": "^3.4",
+                "php": "^8.3",
+                "spatie/laravel-backup": "^9.0|^10.0"
+            },
+            "require-dev": {
+                "laravel/nova-devtool": "^1.10",
+                "laravel/pint": "^1.27",
+                "orchestra/testbench": "^10.12|^11.3",
+                "pestphp/pest": "^4.7|^5.3"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Spatie\\BackupTool\\BackupToolServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\BackupTool\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A Laravel Nova tool to backup your application.",
+            "homepage": "https://github.com/spatie/nova-backup-tool",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "source": "https://github.com/spatie/nova-backup-tool/tree/6.0.5"
+            },
+            "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                }
+            ],
+            "time": "2026-10-19T15:09:23+00:00",
+            "published-time": "2026-10-19T15:10:02+00:00"
+        },
+        {
             "name": "spatie/php-structure-discoverer",
             "version": "2.4.4",
             "source": {
@@ -6837,6 +7025,78 @@
             ],
             "time": "2021-11-30T21:13:59+00:00",
             "published-time": "2021-11-30T21:14:13+00:00"
+        },
+        {
+            "name": "spatie/ssl-certificate",
+            "version": "2.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/ssl-certificate.git",
+                "reference": "ccf1109da16694994e150b8a35d1faa258f62353"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/ssl-certificate/zipball/ccf1109da16694994e150b8a35d1faa258f62353",
+                "reference": "ccf1109da16694994e150b8a35d1faa258f62353",
+                "shasum": ""
+            },
+            "require": {
+                "ext-intl": "*",
+                "ext-json": "*",
+                "nesbot/carbon": "^2.68.1|^3.0",
+                "php": "^8.1",
+                "spatie/macroable": "^2.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.29",
+                "pestphp/pest": "^4.0",
+                "phpstan/phpstan": "^2.2",
+                "spatie/pest-plugin-snapshots": "^2.2",
+                "spatie/ray": "^1.37.2"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Spatie\\SslCertificate\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A class to easily query the properties of an ssl certificate",
+            "homepage": "https://github.com/spatie/ssl-certificate",
+            "keywords": [
+                "spatie",
+                "ssl-certificate"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/ssl-certificate/issues",
+                "source": "https://github.com/spatie/ssl-certificate/tree/2.7.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/spatie",
+                    "type": "github"
+                },
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "other"
+                }
+            ],
+            "time": "2026-06-05T21:47:57+00:00",
+            "published-time": "2026-06-05T21:48:11+00:00"
         },
         {
             "name": "spatie/temporary-directory",
@@ -7812,6 +8072,61 @@
             ],
             "time": "2026-09-12T19:02:49+00:00",
             "published-time": "2026-09-12T19:03:18+00:00"
+        },
+        {
+            "name": "stepanenko3/nova-health",
+            "version": "v1.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stepanenko3/nova-health.git",
+                "reference": "33c8a71d88101a6b8f0b8d72f0aef8414891369c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stepanenko3/nova-health/zipball/33c8a71d88101a6b8f0b8d72f0aef8414891369c",
+                "reference": "33c8a71d88101a6b8f0b8d72f0aef8414891369c",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/nova": "^5.0",
+                "php": ">=8.0",
+                "spatie/cpu-load-health-check": "^1.0",
+                "spatie/laravel-health": "^1.9",
+                "spatie/ssl-certificate": "^2.6"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^2.0",
+                "tightenco/duster": "^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Stepanenko3\\NovaHealth\\ToolServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Stepanenko3\\NovaHealth\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Laravel Nova tool for checking healthy of your Laravel app",
+            "keywords": [
+                "health",
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/stepanenko3/nova-health/issues",
+                "source": "https://github.com/stepanenko3/nova-health/tree/v1.2.3"
+            },
+            "time": "2025-02-15T14:17:36+00:00",
+            "published-time": "2025-02-15T14:18:09+00:00"
         },
         {
             "name": "symfony/clock",
