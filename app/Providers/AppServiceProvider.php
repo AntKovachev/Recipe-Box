@@ -10,6 +10,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\ServiceProvider;
 use App\Services\OctaneStateTest;
 use App\Services\RecipeStatsService;
+use Spatie\Health\Facades\Health;
+use Spatie\Health\Checks\Checks\DatabaseCheck;
+use Spatie\Health\Checks\Checks\CacheCheck;
+use Spatie\Health\Checks\Checks\UsedDiskSpaceCheck;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -39,5 +43,11 @@ class AppServiceProvider extends ServiceProvider
         JsonResource::withoutWrapping();
 
         Recipe::observe(RecipeObserver::class);
+
+        Health::checks([
+            DatabaseCheck::new(), //Can Laravel connect to DB
+            CacheCheck::new(), //Can Laravel write/read to/from cache
+            UsedDiskSpaceCheck::new() //Check how much disk space is used
+        ]);
     }
 }

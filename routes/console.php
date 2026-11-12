@@ -16,3 +16,6 @@ Schedule::command('backup:clean')
 
 Schedule::command('backup:monitor')
     ->dailyAt('03:00');
+
+Schedule::command('health:check')
+    ->everyTenMinutes();
