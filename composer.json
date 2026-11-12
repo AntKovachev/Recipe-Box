@@ -30,6 +30,7 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
+        "itsgoingd/clockwork": "^5.3",
         "laravel/nova-devtool": "^1.10",
         "laravel/pail": "^1.2.5",
         "laravel/pao": "^1.0.6",
