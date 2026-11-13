@@ -14,6 +14,10 @@ use Spatie\Health\Facades\Health;
 use Spatie\Health\Checks\Checks\DatabaseCheck;
 use Spatie\Health\Checks\Checks\CacheCheck;
 use Spatie\Health\Checks\Checks\UsedDiskSpaceCheck;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Sanctum\PersonalAccessToken;
+use App\Models\User;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -49,5 +53,41 @@ class AppServiceProvider extends ServiceProvider
             CacheCheck::new(), //Can Laravel write/read to/from cache
             UsedDiskSpaceCheck::new() //Check how much disk space is used
         ]);
+
+        Auth::viaRequest('custom-api', function (Request $request) {
+            $bearerToken = $request->bearerToken();
+
+            if (! $bearerToken) {
+                return null;
+            }
+
+            $accessToken = PersonalAccessToken::findToken($bearerToken);
+
+            if (! $accessToken) {
+                return null;
+            }
+
+            $expiration = config('sanctum.expiration');
+
+            if (
+                ($expiration !== null &&
+                    $accessToken->created_at->lte(now()->subMinutes($expiration)))
+                || $accessToken->expires_at?->isPast()
+            ) {
+                return null;
+            }
+
+            $user = $accessToken->tokenable;
+
+            if (! $user instanceof \App\Models\User) {
+                return null;
+            }
+
+            if (config('auth.providers.'.config('auth.guards.custom-api.provider').'.model') !== \App\Models\User::class) {
+                return null;
+            }
+
+            return $user->withAccessToken($accessToken);
+        });
     }
 }
