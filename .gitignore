@@ -26,3 +26,6 @@ Homestead.json
 Homestead.yaml
 Thumbs.db
 bootstrap/ssr/
+/typesense-server
+/typesense-server-*.tar.gz
+/typesense-server.md5.txt

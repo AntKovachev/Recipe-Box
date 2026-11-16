@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Spatie\Translatable\HasTranslations;
+use Laravel\Scout\Searchable;
 
 #[Fillable([
     'title',
@@ -30,6 +31,7 @@ class Recipe extends Model implements HasMedia, Sortable
     use InteractsWithMedia;
     use SortableTrait;
     use HasTranslations;
+    use Searchable;
    
     public $sortable = [
         'order_column_name' => 'sort_order',
@@ -52,7 +54,7 @@ class Recipe extends Model implements HasMedia, Sortable
     }
 
     #[Scope]
-    protected function search(Builder $query, string $search): Builder
+    protected function matchingText(Builder $query, string $search): Builder
     {
         $locale = app()->getLocale();
 
@@ -71,6 +73,22 @@ class Recipe extends Model implements HasMedia, Sortable
     {
         return [
             'ingredients' => 'array'
+        ];
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => (string) $this->id,
+            'title_en' => $this->getTranslation('title', 'en', false),
+            'title_bg' => $this->getTranslation('title', 'bg', false),
+            'description_en' => $this->getTranslation('description', 'en', false),
+            'description_bg' => $this->getTranslation('description', 'bg', false),
+            'created_at' => $this->created_at?->timestamp ?? 0,
+            'collection_ids' => $this->collections()
+                ->pluck('collections.id')
+                ->map(fn ($id) => (int) $id)
+                ->all(),
         ];
     }
 }

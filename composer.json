@@ -15,6 +15,7 @@
         "laravel/nova": "^5.8",
         "laravel/octane": "^2.23",
         "laravel/sanctum": "^4.0",
+        "laravel/scout": "^11.10",
         "laravel/tinker": "^3.0",
         "marshmallow/nova-tiptap": "^6.1",
         "mews/purifier": "^3.4",
@@ -26,7 +27,8 @@
         "spatie/nova-backup-tool": "^6.0",
         "spiral/roadrunner-cli": "^2.6.0",
         "spiral/roadrunner-http": "^3.3.0",
-        "stepanenko3/nova-health": "^1.2"
+        "stepanenko3/nova-health": "^1.2",
+        "typesense/typesense-php": "^6.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

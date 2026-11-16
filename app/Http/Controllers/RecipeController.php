@@ -4,19 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RecipeRequest;
 use App\Http\Resources\RecipeResource;
-use App\Jobs\ProcessRecipeJob;
-use App\Mail\RecipeCreated;
 use App\Models\Collection;
 use App\Models\Recipe;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Mail;
 use App\Services\RecipeService;
 
 class RecipeController extends Controller
@@ -45,21 +41,53 @@ class RecipeController extends Controller
         $recipes = Cache::store('redis')
             ->tags(['recipes'])
             ->remember($cacheKey, now()->addMinutes(5), function () use ($request, $user) {
-                $query = Recipe::query()
-                    ->with('user:id,name')
-                    ->latest();
 
                 if ($request->filled('search')) {
-                    $query->search($request->input('search'));
-                }
 
-                if ($request->filled('collection') && $user) {
-                    $collectionId = $request->input('collection');
+                    $query = Recipe::search($request->input('search'));
 
-                    $query->whereHas('collections', function (Builder $query) use ($collectionId, $user) {
-                        $query->where('collections.id', $collectionId)
-                            ->where('collections.user_id', $user->id);
-                    });
+                    if ($request->filled('collection') && $user) {
+                        $collectionId = (int) $request->input('collection');
+
+                        $belongsToUser = Collection::query()
+                            ->where('id', $collectionId)
+                            ->where('user_id', $user->id)
+                            ->exists();
+
+                        if ($belongsToUser) {
+                            $query->options([
+                                'filter_by' => "collection_ids:={$collectionId}",
+                            ]);
+
+                        } else {
+                            $query->options([
+                                'filter_by' => 'id:=__no_matching_recipe__',
+                            ]);
+                        }
+                    }
+
+                    $query->query(
+                        fn (Builder $eloquentQuery) =>
+                            $eloquentQuery->with('user:id,name')
+                    );
+
+                } else {
+
+                    $query = Recipe::query()
+                        ->with('user:id,name')
+                        ->latest();
+
+                    if ($request->filled('collection') && $user) {
+                        $collectionId = $request->input('collection');
+
+                        $query->whereHas(
+                            'collections',
+                            function (Builder $q) use ($collectionId, $user) {
+                                $q->where('collections.id', $collectionId)
+                                    ->where('collections.user_id', $user->id);
+                            }
+                        );
+                    }
                 }
 
                 $recipes = $query->paginate(10)->withQueryString();
