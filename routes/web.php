@@ -6,6 +6,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\WeeklyDigestController;
 use App\Services\OctaneStateTest;
+use Inertia\Inertia;
+
 
 Route::get('/', function () {
     return redirect()->route('recipes.index');
@@ -14,6 +16,9 @@ Route::get('/', function () {
 Route::get('/recipes', [RecipeController::class, 'index'])
     ->name('recipes.index');
 
+Route::get('/tickets', function () {
+    return Inertia::render('Tickets/Index');
+})->name('tickets.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/recipes/create', [RecipeController::class, 'create'])

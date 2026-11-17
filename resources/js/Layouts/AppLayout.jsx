@@ -10,6 +10,8 @@ export default function AppLayout({ children }) {
                 <Link href="/collections">Collections</Link>
                 {' | '}
                 <Link href="/digests">Weekly Digests</Link>
+                {' | '}
+                <Link href="/tickets">Tickets</Link>
             </nav>
 
             <FlashMessage />
