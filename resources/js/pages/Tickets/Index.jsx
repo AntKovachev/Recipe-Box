@@ -111,6 +111,36 @@ export default function Index() {
         restoreUserAndCheckout();
     }, []);
 
+    async function handlePassengersSubmit() {
+        const token = localStorage.getItem('ticket_api_token');
+
+        const response = await fetch('/tickets/checkout/passengers', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+                'X-CSRF-TOKEN': document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute('content'),
+            },
+            body: JSON.stringify({
+                quantity,
+                passengers,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to save passenger details.');
+        }
+
+        const data = await response.json();
+
+        setQuantity(data.checkout.quantity);
+        setPassengers(data.checkout.passengers);
+        setStep(3);
+    }
+
     function handlePassengerChange(index, field, value) {
         setPassengers((currentPassengers) =>
             currentPassengers.map((passenger, passengerIndex) =>
@@ -555,11 +585,54 @@ export default function Index() {
                         <div className="mt-8 flex justify-end">
                             <button
                                 type="button"
+                                onClick={handlePassengersSubmit}
                                 className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700"
                             >
                                 Continue to payment
                             </button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (user && step === 3) {
+        return (
+            <div className="min-h-screen bg-gray-100 px-4 py-10">
+                <div className="mx-auto max-w-5xl">
+                    <div className="mb-8 flex items-center gap-3 text-sm">
+                        <span className="text-green-600">
+                            1. Flight
+                        </span>
+
+                        <span className="text-gray-400">→</span>
+
+                        <span className="text-green-600">
+                            2. Passengers
+                        </span>
+
+                        <span className="text-gray-400">→</span>
+
+                        <span className="font-semibold text-blue-600">
+                            3. Review & Payment
+                        </span>
+
+                        <span className="text-gray-400">→</span>
+
+                        <span className="text-gray-400">
+                            4. Success
+                        </span>
+                    </div>
+
+                    <div className="rounded-2xl bg-white p-8 shadow-lg">
+                        <h1 className="text-3xl font-bold text-gray-900">
+                            Review & Payment
+                        </h1>
+
+                        <p className="mt-2 text-gray-500">
+                            Review your booking before payment.
+                        </p>
                     </div>
                 </div>
             </div>

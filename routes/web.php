@@ -33,6 +33,10 @@ Route::post('/tickets/checkout/start', [TicketCheckoutController::class, 'start'
     ->middleware('auth:custom-api')
     ->name('tickets.checkout.start');
 
+Route::put('/tickets/checkout/passengers', [TicketCheckoutController::class, 'storePassengers'])
+    ->middleware('auth:custom-api')
+    ->name('tickets.checkout.passengers.store');
+
 Route::middleware('auth')->group(function () {
     Route::get('/recipes/create', [RecipeController::class, 'create'])
         ->name('recipes.create');
