@@ -14,6 +14,7 @@ use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Spatie\Translatable\HasTranslations;
 use Laravel\Scout\Searchable;
+use Laravel\Scout\Attributes\SearchUsingFullText;
 
 #[Fillable([
     'title',
@@ -76,19 +77,18 @@ class Recipe extends Model implements HasMedia, Sortable
         ];
     }
 
+    #[SearchUsingFullText(
+        ['search_title', 'search_description'],
+        [
+            'trigram' => ['search_title', 'search_description'],
+            'trigram_mode' => 'fallback',
+        ]
+    )]
     public function toSearchableArray(): array
     {
         return [
-            'id' => (string) $this->id,
-            'title_en' => $this->getTranslation('title', 'en', false),
-            'title_bg' => $this->getTranslation('title', 'bg', false),
-            'description_en' => $this->getTranslation('description', 'en', false),
-            'description_bg' => $this->getTranslation('description', 'bg', false),
-            'created_at' => $this->created_at?->timestamp ?? 0,
-            'collection_ids' => $this->collections()
-                ->pluck('collections.id')
-                ->map(fn ($id) => (int) $id)
-                ->all(),
+            'search_title' => $this->search_title,
+            'search_description' => $this->search_description,
         ];
     }
 }
