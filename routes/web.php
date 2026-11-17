@@ -21,6 +21,14 @@ Route::get('/tickets', function () {
     return Inertia::render('Tickets/Index');
 })->name('tickets.index');
 
+Route::get('/tickets/checkout', [TicketCheckoutController::class, 'show'])
+    ->middleware('auth:custom-api')
+    ->name('tickets.checkout.show');
+    
+Route::delete('/tickets/checkout', [TicketCheckoutController::class, 'destroy'])
+    ->middleware('auth:custom-api')
+    ->name('tickets.checkout.destroy');
+    
 Route::post('/tickets/checkout/start', [TicketCheckoutController::class, 'start'])
     ->middleware('auth:custom-api')
     ->name('tickets.checkout.start');

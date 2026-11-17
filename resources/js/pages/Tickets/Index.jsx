@@ -40,7 +40,7 @@ export default function Index() {
     ];
 
     useEffect(() => {
-        async function restoreUser() {
+        async function restoreUserAndCheckout() {
             const token = localStorage.getItem('ticket_api_token');
 
             if (!token) {
@@ -49,31 +49,78 @@ export default function Index() {
             }
 
             try {
-                const response = await fetch('/api/auth-test', {
+                const authResponse = await fetch('/api/auth-test', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: 'application/json',
                     },
                 });
 
-                if (!response.ok) {
+                if (!authResponse.ok) {
                     localStorage.removeItem('ticket_api_token');
                     return;
                 }
 
-                const data = await response.json();
+                const authData = await authResponse.json();
 
-                setUser(data.user);
+                setUser(authData.user);
+
+                const checkoutResponse = await fetch('/tickets/checkout', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: 'application/json',
+                    },
+                });
+
+                if (checkoutResponse.ok) {
+                    const checkout = await checkoutResponse.json();
+
+                    if (checkout?.uuid && checkout?.flight) {
+                        setSelectedFlight(checkout.flight);
+                        setStep(2);
+                    }
+                }
             } catch (error) {
-                console.error('Failed to restore user:', error);
+                console.error('Failed to restore user or checkout:', error);
                 localStorage.removeItem('ticket_api_token');
             } finally {
                 setCheckingAuth(false);
             }
         }
 
-        restoreUser();
+        restoreUserAndCheckout();
     }, []);
+
+    async function handleStartOver() {
+        const token = localStorage.getItem('ticket_api_token');
+
+        const response = await fetch('/tickets/checkout', {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+                'X-CSRF-TOKEN': document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute('content'),
+            },
+        });
+
+        const checkResponse = await fetch('/tickets/checkout', {
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        const checkout = await checkResponse.json();
+
+        if (!response.ok) {
+            throw new Error('Failed to reset checkout.');
+        }
+
+        setSelectedFlight(null);
+        setStep(1);
+    }
 
     async function handleLogin(event) {
         event.preventDefault();
@@ -143,8 +190,6 @@ export default function Index() {
         }
 
         const data = await response.json();
-
-        console.log('Checkout started:', data);
 
         setStep(2);
     }
@@ -295,6 +340,14 @@ export default function Index() {
                         <p className="mt-2 text-gray-500">
                             Enter the passenger information for this booking.
                         </p>
+
+                        <button
+                            type="button"
+                            onClick={handleStartOver}
+                            className="text-sm font-medium text-blue-600 hover:text-blue-700"
+                        >
+                            Start over
+                        </button>
                     </div>
                 </div>
             </div>

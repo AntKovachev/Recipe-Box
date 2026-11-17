@@ -20,4 +20,18 @@ class TicketCheckoutController extends Controller
 
         return response()->json($checkout);
     }
+
+    public function show(Request $request)
+    {
+        return response()->json(
+            $request->session()->get('ticket_checkout')
+        );
+    }
+
+    public function destroy(Request $request)
+    {
+        $request->session()->forget('ticket_checkout');
+
+        return response()->noContent();
+    }
 }
