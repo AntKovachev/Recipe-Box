@@ -10,6 +10,7 @@ export default function Index() {
 
     const [user, setUser] = useState(null);
     const [selectedFlight, setSelectedFlight] = useState(null);
+    const [step, setStep] = useState(1);
 
     const flights = [
         {
@@ -57,7 +58,6 @@ export default function Index() {
 
                 if (!response.ok) {
                     localStorage.removeItem('ticket_api_token');
-                    setCheckingAuth(false);
                     return;
                 }
 
@@ -116,6 +116,39 @@ export default function Index() {
         }
     }
 
+    async function handleContinue() {
+        if (!selectedFlight) {
+            return;
+        }
+
+        const token = localStorage.getItem('ticket_api_token');
+
+        const response = await fetch('/tickets/checkout/start', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+                'X-CSRF-TOKEN': document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute('content'),
+            },
+            body: JSON.stringify({
+                flight: selectedFlight,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to start checkout.');
+        }
+
+        const data = await response.json();
+
+        console.log('Checkout started:', data);
+
+        setStep(2);
+    }
+
     if (checkingAuth) {
         return (
             <div className="min-h-screen bg-gray-100 px-4 py-12">
@@ -130,34 +163,32 @@ export default function Index() {
         );
     }
 
-    if (user) {
+    if (user && step === 1) {
         return (
             <div className="min-h-screen bg-gray-100 px-4 py-10">
                 <div className="mx-auto max-w-5xl">
-                    <div className="mb-8">
-                        <div className="flex items-center gap-3 text-sm">
-                            <span className="font-semibold text-blue-600">
-                                1. Flight
-                            </span>
+                    <div className="mb-8 flex items-center gap-3 text-sm">
+                        <span className="font-semibold text-blue-600">
+                            1. Flight
+                        </span>
 
-                            <span className="text-gray-400">→</span>
+                        <span className="text-gray-400">→</span>
 
-                            <span className="text-gray-400">
-                                2. Passengers
-                            </span>
+                        <span className="text-gray-400">
+                            2. Passengers
+                        </span>
 
-                            <span className="text-gray-400">→</span>
+                        <span className="text-gray-400">→</span>
 
-                            <span className="text-gray-400">
-                                3. Review & Payment
-                            </span>
+                        <span className="text-gray-400">
+                            3. Review & Payment
+                        </span>
 
-                            <span className="text-gray-400">→</span>
+                        <span className="text-gray-400">→</span>
 
-                            <span className="text-gray-400">
-                                4. Success
-                            </span>
-                        </div>
+                        <span className="text-gray-400">
+                            4. Success
+                        </span>
                     </div>
 
                     <div className="rounded-2xl bg-white p-8 shadow-lg">
@@ -215,12 +246,55 @@ export default function Index() {
                         <div className="mt-8 flex justify-end">
                             <button
                                 type="button"
+                                onClick={handleContinue}
                                 disabled={!selectedFlight}
                                 className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                             >
                                 Continue
                             </button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (user && step === 2) {
+        return (
+            <div className="min-h-screen bg-gray-100 px-4 py-10">
+                <div className="mx-auto max-w-5xl">
+                    <div className="mb-8 flex items-center gap-3 text-sm">
+                        <span className="text-green-600">
+                            1. Flight
+                        </span>
+
+                        <span className="text-gray-400">→</span>
+
+                        <span className="font-semibold text-blue-600">
+                            2. Passengers
+                        </span>
+
+                        <span className="text-gray-400">→</span>
+
+                        <span className="text-gray-400">
+                            3. Review & Payment
+                        </span>
+
+                        <span className="text-gray-400">→</span>
+
+                        <span className="text-gray-400">
+                            4. Success
+                        </span>
+                    </div>
+
+                    <div className="rounded-2xl bg-white p-8 shadow-lg">
+                        <h1 className="text-3xl font-bold text-gray-900">
+                            Passenger details
+                        </h1>
+
+                        <p className="mt-2 text-gray-500">
+                            Enter the passenger information for this booking.
+                        </p>
                     </div>
                 </div>
             </div>
