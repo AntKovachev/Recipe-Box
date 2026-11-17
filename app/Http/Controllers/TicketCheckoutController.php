@@ -55,4 +55,27 @@ class TicketCheckoutController extends Controller
             'checkout' => $checkout,
         ]);
     }
+
+    public function pay(Request $request)
+    {
+        $checkout = $request->session()->get('ticket_checkout');
+
+        if (!$checkout) {
+            return response()->json([
+                'message' => 'Checkout not found.',
+            ], 404);
+        }
+
+        sleep(5);
+
+        $checkout['payment_method'] = 'invoice';
+        $checkout['status'] = 'paid';
+
+        $request->session()->put('ticket_checkout', $checkout);
+
+        return response()->json([
+            'message' => 'Payment successful.',
+            'checkout' => $checkout,
+        ]);
+    }
 }

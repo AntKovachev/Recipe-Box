@@ -33,6 +33,8 @@ export default function Index() {
         ? selectedFlight.price * quantity
         : 0;
 
+    const [processingPayment, setProcessingPayment] = useState(false);
+
     const flights = [
         {
             id: 1,
@@ -102,6 +104,11 @@ export default function Index() {
 
                         if (data.checkout.passengers?.length) {
                             setPassengers(data.checkout.passengers);
+                        }
+
+                        if (data.checkout.status === 'paid') {
+                            setStep(4);
+                        } else if (data.checkout.passengers?.length) {
                             setStep(3);
                         } else {
                             setStep(2);
@@ -118,6 +125,39 @@ export default function Index() {
 
         restoreUserAndCheckout();
     }, []);
+
+    async function handlePayment() {
+        if (!confirmedDetails || !acceptedTerms) {
+            return;
+        }
+
+        setProcessingPayment(true);
+
+        const token = localStorage.getItem('ticket_api_token');
+
+        try {
+            const response = await fetch('/tickets/checkout/pay', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                    'X-CSRF-TOKEN': document
+                        .querySelector('meta[name="csrf-token"]')
+                        .getAttribute('content'),
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Payment failed.');
+            }
+
+            await response.json();
+
+            setStep(4);
+        } finally {
+            setProcessingPayment(false);
+        }
+    }
 
     async function handlePassengersSubmit() {
         const token = localStorage.getItem('ticket_api_token');
@@ -711,10 +751,17 @@ export default function Index() {
 
                                 <button
                                     type="button"
-                                    disabled={!confirmedDetails || !acceptedTerms}
+                                    onClick={handlePayment}
+                                    disabled={
+                                        !confirmedDetails ||
+                                        !acceptedTerms ||
+                                        processingPayment
+                                    }
                                     className="mt-8 w-full rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                                 >
-                                    Pay by invoice
+                                    {processingPayment
+                                        ? 'Processing payment...'
+                                        : 'Pay by invoice'}
                                 </button>
                             </div>
                         </div>
@@ -799,6 +846,75 @@ export default function Index() {
             </div>
         );
     }
+
+    if (user && step === 4) {
+        return (
+            <div className="min-h-screen bg-gray-100 px-4 py-10">
+                <div className="mx-auto max-w-4xl">
+                    <div className="mb-8 flex items-center gap-3 text-sm">
+                        <span className="text-green-600">
+                            1. Flight
+                        </span>
+
+                        <span className="text-gray-400">→</span>
+
+                        <span className="text-green-600">
+                            2. Passengers
+                        </span>
+
+                        <span className="text-gray-400">→</span>
+
+                        <span className="text-green-600">
+                            3. Payment
+                        </span>
+
+                        <span className="text-gray-400">→</span>
+
+                        <span className="font-semibold text-blue-600">
+                            4. Success
+                        </span>
+                    </div>
+
+                    <div className="rounded-2xl bg-white p-10 text-center shadow-lg">
+                        <div className="text-5xl">
+                            ✓
+                        </div>
+
+                        <h1 className="mt-4 text-3xl font-bold text-gray-900">
+                            Booking successful
+                        </h1>
+
+                        <p className="mt-3 text-gray-500">
+                            Your flight booking has been completed successfully.
+                        </p>
+
+                        <div className="mt-8 rounded-xl bg-gray-50 p-6 text-left">
+                            <p className="font-semibold text-gray-900">
+                                {selectedFlight.from} → {selectedFlight.to}
+                            </p>
+
+                            <p className="mt-1 text-sm text-gray-500">
+                                {selectedFlight.date} · {selectedFlight.time}
+                            </p>
+
+                            <p className="mt-4 text-sm text-gray-600">
+                                Tickets: {quantity}
+                            </p>
+
+                            <p className="text-sm text-gray-600">
+                                Total: €{totalPrice}
+                            </p>
+
+                            <p className="text-sm text-gray-600">
+                                Payment method: Invoice
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen bg-gray-100 px-4 py-12">
             <div className="mx-auto max-w-md">
