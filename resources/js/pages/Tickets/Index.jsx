@@ -1,6 +1,15 @@
 import { useEffect, useState } from 'react';
 import { fetcher } from '../../lib/fetcher';
 
+const emptyPassenger = {
+    first_name: '',
+    last_name: '',
+    date_of_birth: '',
+    nationality: '',
+    document_number: '',
+    email: '',
+};
+
 export default function Index() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -11,6 +20,11 @@ export default function Index() {
     const [user, setUser] = useState(null);
     const [selectedFlight, setSelectedFlight] = useState(null);
     const [step, setStep] = useState(1);
+
+    const [quantity, setQuantity] = useState(1);
+    const [passengers, setPassengers] = useState([
+        { ...emptyPassenger },
+    ]);
 
     const flights = [
         {
@@ -73,10 +87,16 @@ export default function Index() {
                 });
 
                 if (checkoutResponse.ok) {
-                    const checkout = await checkoutResponse.json();
+                    const data = await checkoutResponse.json();
 
-                    if (checkout?.uuid && checkout?.flight) {
-                        setSelectedFlight(checkout.flight);
+                    if (data.checkout) {
+                        setSelectedFlight(data.checkout.flight);
+                        setQuantity(data.checkout.quantity ?? 1);
+
+                        if (data.checkout.passengers?.length) {
+                            setPassengers(data.checkout.passengers);
+                        }
+
                         setStep(2);
                     }
                 }
@@ -90,6 +110,35 @@ export default function Index() {
 
         restoreUserAndCheckout();
     }, []);
+
+    function handlePassengerChange(index, field, value) {
+        setPassengers((currentPassengers) =>
+            currentPassengers.map((passenger, passengerIndex) =>
+                passengerIndex === index
+                    ? {
+                          ...passenger,
+                          [field]: value,
+                      }
+                    : passenger
+            )
+        );
+    }
+
+    function handleQuantityChange(newQuantity) {
+        setQuantity(newQuantity);
+
+        setPassengers((currentPassengers) => {
+            const updatedPassengers = [...currentPassengers];
+
+            while (updatedPassengers.length < newQuantity) {
+                updatedPassengers.push({
+                    ...emptyPassenger,
+                });
+            }
+
+            return updatedPassengers.slice(0, newQuantity);
+        });
+    }
 
     async function handleStartOver() {
         const token = localStorage.getItem('ticket_api_token');
@@ -105,20 +154,13 @@ export default function Index() {
             },
         });
 
-        const checkResponse = await fetch('/tickets/checkout', {
-            headers: {
-                Accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
-
-        const checkout = await checkResponse.json();
-
         if (!response.ok) {
             throw new Error('Failed to reset checkout.');
         }
 
         setSelectedFlight(null);
+        setQuantity(1);
+        setPassengers([{ ...emptyPassenger }]);
         setStep(1);
     }
 
@@ -189,8 +231,9 @@ export default function Index() {
             throw new Error('Failed to start checkout.');
         }
 
-        const data = await response.json();
+        const checkout = await response.json();
 
+        setQuantity(checkout.quantity ?? 1);
         setStep(2);
     }
 
@@ -333,21 +376,190 @@ export default function Index() {
                     </div>
 
                     <div className="rounded-2xl bg-white p-8 shadow-lg">
-                        <h1 className="text-3xl font-bold text-gray-900">
-                            Passenger details
-                        </h1>
+                        <div className="flex items-start justify-between">
+                            <div>
+                                <h1 className="text-3xl font-bold text-gray-900">
+                                    Passenger details
+                                </h1>
 
-                        <p className="mt-2 text-gray-500">
-                            Enter the passenger information for this booking.
-                        </p>
+                                <p className="mt-2 text-gray-500">
+                                    Enter the details for everyone travelling.
+                                </p>
+                            </div>
 
-                        <button
-                            type="button"
-                            onClick={handleStartOver}
-                            className="text-sm font-medium text-blue-600 hover:text-blue-700"
-                        >
-                            Start over
-                        </button>
+                            <button
+                                type="button"
+                                onClick={handleStartOver}
+                                className="text-sm font-medium text-blue-600 hover:text-blue-700"
+                            >
+                                Start over
+                            </button>
+                        </div>
+
+                        <div className="mt-8">
+                            <label className="mb-2 block text-sm font-medium text-gray-700">
+                                Number of tickets
+                            </label>
+
+                            <select
+                                value={quantity}
+                                onChange={(event) =>
+                                    handleQuantityChange(
+                                        Number(event.target.value)
+                                    )
+                                }
+                                className="w-full max-w-xs rounded-lg border border-gray-300 px-4 py-3"
+                            >
+                                <option value={1}>1 ticket</option>
+                                <option value={2}>2 tickets</option>
+                                <option value={3}>3 tickets</option>
+                                <option value={4}>4 tickets</option>
+                            </select>
+                        </div>
+
+                        <div className="mt-8 space-y-6">
+                            {passengers.map((passenger, index) => (
+                                <div
+                                    key={index}
+                                    className="rounded-xl border border-gray-200 p-6"
+                                >
+                                    <h2 className="text-xl font-semibold text-gray-900">
+                                        Passenger {index + 1}
+                                    </h2>
+
+                                    <div className="mt-5 grid gap-5 md:grid-cols-2">
+                                        <div>
+                                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                                                First name
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                required
+                                                value={passenger.first_name}
+                                                onChange={(event) =>
+                                                    handlePassengerChange(
+                                                        index,
+                                                        'first_name',
+                                                        event.target.value
+                                                    )
+                                                }
+                                                className="w-full rounded-lg border border-gray-300 px-4 py-3"
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                                                Last name
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                required
+                                                value={passenger.last_name}
+                                                onChange={(event) =>
+                                                    handlePassengerChange(
+                                                        index,
+                                                        'last_name',
+                                                        event.target.value
+                                                    )
+                                                }
+                                                className="w-full rounded-lg border border-gray-300 px-4 py-3"
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                                                Date of birth
+                                            </label>
+
+                                            <input
+                                                type="date"
+                                                required
+                                                value={passenger.date_of_birth}
+                                                onChange={(event) =>
+                                                    handlePassengerChange(
+                                                        index,
+                                                        'date_of_birth',
+                                                        event.target.value
+                                                    )
+                                                }
+                                                className="w-full rounded-lg border border-gray-300 px-4 py-3"
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                                                Nationality
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                required
+                                                value={passenger.nationality}
+                                                onChange={(event) =>
+                                                    handlePassengerChange(
+                                                        index,
+                                                        'nationality',
+                                                        event.target.value
+                                                    )
+                                                }
+                                                className="w-full rounded-lg border border-gray-300 px-4 py-3"
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                                                Passport / document number
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                required
+                                                value={passenger.document_number}
+                                                onChange={(event) =>
+                                                    handlePassengerChange(
+                                                        index,
+                                                        'document_number',
+                                                        event.target.value
+                                                    )
+                                                }
+                                                className="w-full rounded-lg border border-gray-300 px-4 py-3"
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                                                Email
+                                            </label>
+
+                                            <input
+                                                type="email"
+                                                required
+                                                value={passenger.email}
+                                                onChange={(event) =>
+                                                    handlePassengerChange(
+                                                        index,
+                                                        'email',
+                                                        event.target.value
+                                                    )
+                                                }
+                                                className="w-full rounded-lg border border-gray-300 px-4 py-3"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="mt-8 flex justify-end">
+                            <button
+                                type="button"
+                                className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700"
+                            >
+                                Continue to payment
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -381,7 +593,9 @@ export default function Index() {
                             <input
                                 type="email"
                                 value={email}
-                                onChange={(event) => setEmail(event.target.value)}
+                                onChange={(event) =>
+                                    setEmail(event.target.value)
+                                }
                                 required
                                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
                                 placeholder="tickets@example.com"
@@ -396,7 +610,9 @@ export default function Index() {
                             <input
                                 type="password"
                                 value={password}
-                                onChange={(event) => setPassword(event.target.value)}
+                                onChange={(event) =>
+                                    setPassword(event.target.value)
+                                }
                                 required
                                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
                                 placeholder="••••••••"
