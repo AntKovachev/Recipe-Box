@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { fetcher } from '../../lib/fetcher';
+import CheckoutBreadcrumbs from './components/CheckoutBreadcrumbs';
 
 const emptyPassenger = {
     first_name: '',
@@ -333,30 +334,7 @@ export default function Index() {
         return (
             <div className="min-h-screen bg-gray-100 px-4 py-10">
                 <div className="mx-auto max-w-5xl">
-                    <div className="mb-8 flex items-center gap-3 text-sm">
-                        <span className="font-semibold text-blue-600">
-                            1. Flight
-                        </span>
-
-                        <span className="text-gray-400">→</span>
-
-                        <span className="text-gray-400">
-                            2. Passengers
-                        </span>
-
-                        <span className="text-gray-400">→</span>
-
-                        <span className="text-gray-400">
-                            3. Payment
-                        </span>
-
-                        <span className="text-gray-400">→</span>
-
-                        <span className="text-gray-400">
-                            4. Success
-                        </span>
-                    </div>
-
+                    <CheckoutBreadcrumbs currentStep={1} />
                     <div className="rounded-2xl bg-white p-8 shadow-lg">
                         <div className="mb-8">
                             <p className="text-sm font-medium text-blue-600">
@@ -429,30 +407,7 @@ export default function Index() {
         return (
             <div className="min-h-screen bg-gray-100 px-4 py-10">
                 <div className="mx-auto max-w-5xl">
-                    <div className="mb-8 flex items-center gap-3 text-sm">
-                        <span className="text-green-600">
-                            1. Flight
-                        </span>
-
-                        <span className="text-gray-400">→</span>
-
-                        <span className="font-semibold text-blue-600">
-                            2. Passengers
-                        </span>
-
-                        <span className="text-gray-400">→</span>
-
-                        <span className="text-gray-400">
-                            3. Review & Payment
-                        </span>
-
-                        <span className="text-gray-400">→</span>
-
-                        <span className="text-gray-400">
-                            4. Success
-                        </span>
-                    </div>
-
+                    <CheckoutBreadcrumbs currentStep={2} />
                     <div className="rounded-2xl bg-white p-8 shadow-lg">
                         <div className="flex items-start justify-between">
                             <div>
@@ -648,36 +603,7 @@ export default function Index() {
         return (
             <div className="min-h-screen bg-gray-100 px-4 py-10">
                 <div className="mx-auto max-w-6xl">
-                    <div className="mb-8 flex items-center gap-3 text-sm">
-                        <span className="text-green-600">
-                            1. Flight
-                        </span>
-
-                        <span className="text-gray-400">→</span>
-
-                        <span className="text-green-600">
-                            2. Checkout
-                        </span>
-
-                        <span className="text-gray-400">→</span>
-
-                        <span className="text-green-600">
-                            3. Passenger details
-                        </span>
-
-                        <span className="text-gray-400">→</span>
-
-                        <span className="font-semibold text-blue-600">
-                            4. Payment
-                        </span>
-
-                        <span className="text-gray-400">→</span>
-
-                        <span className="text-gray-400">
-                            5. Success
-                        </span>
-                    </div>
-
+                    <CheckoutBreadcrumbs currentStep={3} />
                     <div className="grid gap-6 lg:grid-cols-3">
                         <div className="lg:col-span-2">
                             <div className="rounded-2xl bg-white p-8 shadow-lg">
@@ -851,30 +777,7 @@ export default function Index() {
         return (
             <div className="min-h-screen bg-gray-100 px-4 py-10">
                 <div className="mx-auto max-w-4xl">
-                    <div className="mb-8 flex items-center gap-3 text-sm">
-                        <span className="text-green-600">
-                            1. Flight
-                        </span>
-
-                        <span className="text-gray-400">→</span>
-
-                        <span className="text-green-600">
-                            2. Passengers
-                        </span>
-
-                        <span className="text-gray-400">→</span>
-
-                        <span className="text-green-600">
-                            3. Payment
-                        </span>
-
-                        <span className="text-gray-400">→</span>
-
-                        <span className="font-semibold text-blue-600">
-                            4. Success
-                        </span>
-                    </div>
-
+                    <CheckoutBreadcrumbs currentStep={4} />
                     <div className="rounded-2xl bg-white p-10 text-center shadow-lg">
                         <div className="text-5xl">
                             ✓
