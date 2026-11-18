@@ -7,6 +7,7 @@ use App\Http\Requests\StoreTicketPassengersRequest;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Laravel\Cashier\Cashier;
 
 class TicketCheckoutController extends Controller
 {
@@ -75,25 +76,65 @@ class TicketCheckoutController extends Controller
             'quantity' => $checkout['quantity'],
             'total_price' => $checkout['flight']['price'] * $checkout['quantity'],
             'status' => 'pending',
-            'payment_method' => 'invoice',
+            'payment_method' => 'stripe',
         ]);
 
-        sleep(5);
+        $cashierCheckout = $request->user()->checkout(
+            [
+                config('services.stripe.flight_price_id') => $checkout['quantity'],
+            ],
+            [
+                'success_url' => route('tickets.checkout.stripe.success')
+                    . '?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => route('tickets.index'),
+                'metadata' => [
+                    'booking_id' => $booking->id,
+                ],
+            ]
+        );
+
+        return response()->json([
+            'url' => $cashierCheckout->asStripeCheckoutSession()->url,
+        ]);
+    }
+
+    public function stripeSuccess(Request $request)
+    {
+        $sessionId = $request->get('session_id');
+
+        if (!$sessionId) {
+            return redirect()->route('tickets.index');
+        }
+
+        $session = Cashier::stripe()
+            ->checkout
+            ->sessions
+            ->retrieve($sessionId);
+
+        if ($session->payment_status !== 'paid') {
+            return redirect()->route('tickets.index');
+        }
+
+        $bookingId = $session['metadata']['booking_id'] ?? null;
+
+        $booking = Booking::findOrFail($bookingId);
 
         $booking->update([
             'status' => 'paid',
+            'stripe_checkout_session_id' => $session->id,
+            'stripe_payment_intent_id' => $session->payment_intent,
             'paid_at' => now(),
         ]);
 
-        $checkout['payment_method'] = 'invoice';
-        $checkout['status'] = 'paid';
+        $checkout = $request->session()->get('ticket_checkout');
 
-        $request->session()->put('ticket_checkout', $checkout);
+        if ($checkout) {
+            $checkout['status'] = 'paid';
+            $checkout['payment_method'] = 'stripe';
 
-        return response()->json([
-            'message' => 'Payment successful.',
-            'checkout' => $checkout,
-            'booking' => $booking,
-        ]);
+            $request->session()->put('ticket_checkout', $checkout);
+        }
+
+        return redirect()->route('tickets.index');
     }
 }

@@ -11,13 +11,14 @@ namespace App\Models;
     use Illuminate\Notifications\Notifiable;
     use Illuminate\Database\Eloquent\Relations\HasMany;
     use Laravel\Sanctum\HasApiTokens;
+    use Laravel\Cashier\Billable;
 
     #[Fillable(['name', 'email', 'password'])]
     #[Hidden(['password', 'remember_token'])]
     class User extends Authenticatable
     {
         /** @use HasFactory<UserFactory> */
-        use HasApiTokens, HasFactory, Notifiable;
+        use HasApiTokens, HasFactory, Notifiable, Billable;
 
         /**
          * Get the attributes that should be cast.

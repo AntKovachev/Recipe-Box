@@ -167,9 +167,9 @@ export default function Index() {
                 throw new Error('Payment failed.');
             }
 
-            await response.json();
+            const data = await response.json();
 
-            setStep(4);
+            window.location.href = data.url;
         } finally {
             setProcessingPayment(false);
         }

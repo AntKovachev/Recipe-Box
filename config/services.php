@@ -38,5 +38,8 @@ return [
     'external_api' => [
         'url' => env('EXTERNAL_API_URL'),
         'timeout' => env('EXTERNAL_API_TIMEOUT', 10)
-    ]
+    ],
+    'stripe' => [
+        'flight_price_id' => env('STRIPE_FLIGHT_PRICE_ID'),
+    ],
 ];
