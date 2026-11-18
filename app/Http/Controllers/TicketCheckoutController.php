@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StartTicketCheckoutRequest;
 use App\Http\Requests\StoreTicketPassengersRequest;
+use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -66,7 +67,23 @@ class TicketCheckoutController extends Controller
             ], 404);
         }
 
+        $booking = Booking::create([
+            'uuid' => (string) Str::uuid(),
+            'user_id' => $request->user()->id,
+            'flight' => $checkout['flight'],
+            'passengers' => $checkout['passengers'],
+            'quantity' => $checkout['quantity'],
+            'total_price' => $checkout['flight']['price'] * $checkout['quantity'],
+            'status' => 'pending',
+            'payment_method' => 'invoice',
+        ]);
+
         sleep(5);
+
+        $booking->update([
+            'status' => 'paid',
+            'paid_at' => now(),
+        ]);
 
         $checkout['payment_method'] = 'invoice';
         $checkout['status'] = 'paid';
@@ -76,6 +93,7 @@ class TicketCheckoutController extends Controller
         return response()->json([
             'message' => 'Payment successful.',
             'checkout' => $checkout,
+            'booking' => $booking,
         ]);
     }
 }
