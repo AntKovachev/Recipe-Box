@@ -1440,6 +1440,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-hook-form@npm:^7.92.0":
+  version: 7.92.0
+  resolution: "react-hook-form@npm:7.92.0"
+  peerDependencies:
+    "@types/react": "*"
+    react: ^16.8.0 || ^17 || ^18 || ^19
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: afed3d373c8f61bf019d82e92ff13dd41d39027b5c70332268f79a8bdcbea476798ffa9b4081df832dd6993e995092b2bc0788d24e51df173720ec57478a1631
+  languageName: node
+  linkType: hard
+
 "react-reconciler@npm:^0.33.0":
   version: 0.33.0
   resolution: "react-reconciler@npm:0.33.0"
@@ -1542,6 +1555,7 @@ __metadata:
     qs: "npm:^6.17.1"
     react: "npm:^19.3.1"
     react-dom: "npm:^19.3.1"
+    react-hook-form: "npm:^7.92.0"
     swr: "npm:^2.5.1"
     tailwindcss: "npm:^4.0.0"
     vite: "npm:^8.0.0"

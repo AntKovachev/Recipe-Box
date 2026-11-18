@@ -4,6 +4,7 @@ import {
     useMemo,
     useState,
 } from 'react';
+import { useForm } from 'react-hook-form';
 import { fetcher } from '../../lib/fetcher';
 import CheckoutBreadcrumbs from './components/CheckoutBreadcrumbs';
 import FlightStep from './components/FlightStep';
@@ -21,8 +22,10 @@ const emptyPassenger = {
 };
 
 export default function Index() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const {
+        register,
+        handleSubmit,
+    } = useForm();
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [checkingAuth, setCheckingAuth] = useState(true);
@@ -255,9 +258,7 @@ export default function Index() {
         setStep(1);
     }
 
-    async function handleLogin(event) {
-        event.preventDefault();
-
+    async function handleLogin(formData) {
         setLoading(true);
         setError(null);
 
@@ -268,8 +269,8 @@ export default function Index() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    email,
-                    password,
+                    email: formData.email,
+                    password: formData.password,
                 }),
             });
 
@@ -414,7 +415,7 @@ export default function Index() {
                         </p>
                     </div>
 
-                    <form onSubmit={handleLogin} className="space-y-5">
+                    <form onSubmit={handleSubmit(handleLogin)} className="space-y-5">
                         <div>
                             <label className="mb-1 block text-sm font-medium text-gray-700">
                                 Email
@@ -422,11 +423,9 @@ export default function Index() {
 
                             <input
                                 type="email"
-                                value={email}
-                                onChange={(event) =>
-                                    setEmail(event.target.value)
-                                }
-                                required
+                                {...register('email', {
+                                    required: 'Email is required.',
+                                })}
                                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
                                 placeholder="tickets@example.com"
                             />
@@ -439,11 +438,9 @@ export default function Index() {
 
                             <input
                                 type="password"
-                                value={password}
-                                onChange={(event) =>
-                                    setPassword(event.target.value)
-                                }
-                                required
+                                {...register('password', {
+                                    required: 'Password is required.',
+                                })}
                                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
                                 placeholder="••••••••"
                             />
