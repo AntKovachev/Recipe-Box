@@ -1,4 +1,9 @@
-import { useEffect, useState } from 'react';
+import {
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
 import { fetcher } from '../../lib/fetcher';
 import CheckoutBreadcrumbs from './components/CheckoutBreadcrumbs';
 import FlightStep from './components/FlightStep';
@@ -34,10 +39,13 @@ export default function Index() {
     const [paymentMethod, setPaymentMethod] = useState('invoice');
     const [confirmedDetails, setConfirmedDetails] = useState(false);
     const [acceptedTerms, setAcceptedTerms] = useState(false);
-    const totalPrice = selectedFlight
-        ? selectedFlight.price * quantity
-        : 0;
-
+    
+    const totalPrice = useMemo(() => {
+        return selectedFlight
+            ? selectedFlight.price * quantity
+            : 0;
+    }, [selectedFlight, quantity]);
+    
     const [processingPayment, setProcessingPayment] = useState(false);
 
     const flights = [
@@ -194,20 +202,20 @@ export default function Index() {
         setStep(3);
     }
 
-    function handlePassengerChange(index, field, value) {
+    const handlePassengerChange = useCallback((index, field, value) => {
         setPassengers((currentPassengers) =>
             currentPassengers.map((passenger, passengerIndex) =>
                 passengerIndex === index
                     ? {
-                          ...passenger,
-                          [field]: value,
-                      }
+                        ...passenger,
+                        [field]: value,
+                    }
                     : passenger
             )
         );
-    }
+    }, []);
 
-    function handleQuantityChange(newQuantity) {
+    const handleQuantityChange = useCallback((newQuantity) => {
         setQuantity(newQuantity);
 
         setPassengers((currentPassengers) => {
@@ -221,7 +229,7 @@ export default function Index() {
 
             return updatedPassengers.slice(0, newQuantity);
         });
-    }
+    }, []);
 
     async function handleStartOver() {
         const token = localStorage.getItem('ticket_api_token');
